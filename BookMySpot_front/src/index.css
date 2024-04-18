@@ -16,5 +16,9 @@
 }
 
 .homebartext {
-  @apply text-xs md:text-sm
+  @apply text-xs md:text-sm;
+}
+
+.placecardtext{
+  @apply text-xs md:text-base;
 }
