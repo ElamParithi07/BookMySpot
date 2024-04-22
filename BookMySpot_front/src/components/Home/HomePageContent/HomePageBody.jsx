@@ -3,7 +3,6 @@ import PlaceCard from './PlaceCard'
 import axios from 'axios';
 
 
-
 function HomePageBody() {
     const [spotList, setSpotList] = useState([]);
 
@@ -20,9 +19,9 @@ function HomePageBody() {
         handleFetchData()
     },[]);
     return (
-        <div className='w-full flex flex-wrap justify-start py-6 md:gap-0'>
+        <div className='w-full flex flex-wrap justify-start py-6 md:gap-0  md:my-20 '>
             {spotList?.map((item)=>{
-                return <PlaceCard name ={item.movie} rating ={item.rating} key={item.id} imageurl={item.imdb_url}/>
+                return <PlaceCard name ={item.movie} rating ={item.rating} key={item.id} imageurl={item.imdb_url} id={item.id}/>
             })}
         </div>
     )
