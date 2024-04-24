@@ -9,6 +9,7 @@ import { CiGlobe } from "react-icons/ci";
 import NavSearchbar from './NavSearchbar';
 import { TbBrandAirbnb } from "react-icons/tb";
 import HomeheaderBar from '../Home/HomeheaderBar';
+import { useLocation } from 'react-router-dom'
 
 function Sidebar({ isOpen, handlesidebar }) {
     return (
@@ -38,6 +39,8 @@ function Sidebar({ isOpen, handlesidebar }) {
 }
 
 function Navbar() {
+    const location = useLocation();
+    const isHomePage = location.pathname === '/';
     const [isOpen, setOpen] = useState(false);
     const handlesidebar = () => {
         setOpen(!isOpen);
@@ -54,7 +57,7 @@ function Navbar() {
                     <NavSearchbar />
                     <div className='hidden w-0 md:flex basis-1/4 justify-between items-center gap-3'>
                         <div className='md:flex items-center justify-center gap-0.5'>
-                            <CiGlobe  className='text-xl'/>
+                            <CiGlobe className='text-xl' />
                             <p className='text-base'>Add Mine</p>
                         </div>
                         <div>
@@ -65,14 +68,14 @@ function Navbar() {
                         </div>
                     </div>
                 </div>
-                <div className='flex justify-center'>
+                {isHomePage && <div className='flex justify-center'>
                     <HomeheaderBar />
-                </div>
+                </div>}
             </nav>
             <div className='pt-40 md:pt-24'>
                 <Outlet />
             </div>
-            <div className="flex fixed bottom-0 w-screen h-20 bg-white border-t justify-evenly items-center md:hidden">
+            {isHomePage && <div className="flex fixed bottom-0 w-screen h-20 bg-white border-t justify-evenly items-center md:hidden">
                 <div className='bottomiconbox'>
                     <IoHomeOutline className='text-2xl text-primary' />
                     <p className='text-primary text-xs'>Home</p>
@@ -85,7 +88,7 @@ function Navbar() {
                     <FaUserCircle className='text-2xl text-slate-600' />
                     <p className='text-xs'>Login</p>
                 </div>
-            </div>
+            </div>}
         </>
     )
 }

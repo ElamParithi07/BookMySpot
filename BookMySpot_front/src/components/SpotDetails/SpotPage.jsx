@@ -4,6 +4,12 @@ import axios from 'axios';
 import SpotImageGrid from './SpotImageGrid';
 import { CiExport } from "react-icons/ci";
 import { CiHeart } from "react-icons/ci";
+import { IoMdStar } from 'react-icons/io';
+import { PiDoorOpen } from "react-icons/pi";
+import { SlLocationPin } from "react-icons/sl";
+import { GrKey } from "react-icons/gr";
+import { FaChevronDown } from "react-icons/fa6";
+import SpotDetails from './SpotDetailsPageContent/SpotDetails';
 
 function SpotPage() {
     const { id } = useParams();
@@ -24,22 +30,22 @@ function SpotPage() {
     }, []);
 
     return (
-        <div className='mx-7 md:mx-40 md:my-20 flex flex-col h-screen md:py-8 gap-5 mt-28'>
+        <div className='mx-7 md:mx-40 min-h-fit flex flex-col md:py-10 gap-5'>
             <div className='flex flex-col md:flex-row justify-between'>
                 <p className='text-lg md:text-2xl font-medium'>{data.movie}</p>
                 <div className='flex gap-5'>
                     <div className='flex items-center justify-center gap-1'>
-                        <CiExport  className='text-lg md:text-2xl'/>
+                        <CiExport className='text-lg md:text-2xl' />
                         <p className='text-sm md:text-base'>Share</p>
                     </div>
                     <div className='flex items-center justify-center gap-1'>
-                        <CiHeart  className='text-lg md:text-2xl'/>
+                        <CiHeart className='text-lg md:text-2xl'/>
                         <p className='text-sm md:text-base'>Save</p>
                     </div>
                 </div>
             </div>
             <SpotImageGrid />
-            
+            <SpotDetails/>
         </div>
     );
 }

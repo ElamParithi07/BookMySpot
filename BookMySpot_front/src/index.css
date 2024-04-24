@@ -3,22 +3,34 @@
 @tailwind utilities;
 
 
-.bottomiconbox{
-  @apply flex flex-col items-center justify-center text-sm ;
-}
+@layer utilities {
+  .bottomiconbox {
+    @apply flex flex-col items-center justify-center text-sm;
+  }
 
-.sidebariconbox{
-  @apply flex flex-col items-center justify-center gap-1;
-}
+  .sidebariconbox {
+    @apply flex flex-col items-center justify-center gap-1;
+  }
 
-.homebaricon {
-  @apply text-lg md:text-2xl;
-}
+  .homebaricon {
+    @apply text-lg md:text-2xl;
+  }
 
-.homebartext {
-  @apply text-xs md:text-sm;
-}
+  .homebartext {
+    @apply text-xs md:text-sm;
+  }
 
-.placecardtext{
-  @apply text-xs md:text-base;
+  .placecardtext {
+    @apply text-xs md:text-base;
+  }
+
+  .custom-dot::before {
+    content: '\00B7';
+    margin-right: 0.5rem;
+    font-size: 25px;
+  }
+
+  .reviewbox{
+    @apply h-40 w-40 border-l p-4 flex flex-col justify-between;
+  }
 }
