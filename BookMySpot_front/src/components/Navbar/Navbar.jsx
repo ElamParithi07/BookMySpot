@@ -3,7 +3,7 @@ import { GoSearch } from "react-icons/go";
 import { IoReorderThreeOutline } from "react-icons/io5"
 import { FaUserCircle } from "react-icons/fa";
 import { IoHomeOutline } from "react-icons/io5";
-import { Outlet } from 'react-router-dom';
+import { Link, Outlet } from 'react-router-dom';
 import { IoClose } from "react-icons/io5";
 import { CiGlobe } from "react-icons/ci";
 import NavSearchbar from './NavSearchbar';
@@ -30,7 +30,7 @@ function Sidebar({ isOpen, handlesidebar }) {
                     </li>
                     <li className='sidebariconbox'>
                         <FaUserCircle className='text-3xl text-slate-600' />
-                        <p className='text-base'>Login</p>
+                        <Link className='text-base' to={'/login'}>Login</Link>
                     </li>
                 </ul>
             </div>
