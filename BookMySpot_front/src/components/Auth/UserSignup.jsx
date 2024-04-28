@@ -29,7 +29,7 @@ function UserSignup() {
                         placeholder='Confirm Password'
                     />
                     <button className='w-full bg-primary h-10 text-white rounded-md'>
-                      <Link to={'/otpauth'}>Signup</Link>
+                      Signup
                     </button>
                 </form>
                 <div className='flex items-center justify-center gap-2 cursor-pointer'>

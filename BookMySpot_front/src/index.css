@@ -31,6 +31,6 @@
   }
 
   .reviewbox{
-    @apply h-32 md:h-36 w-32 md:w-36 border-l p-4 flex flex-col justify-between m-2;
+    @apply h-32 md:h-36 w-32 md:w-36 border-l p-4 flex flex-col justify-between lg:m-2;
   }
 }

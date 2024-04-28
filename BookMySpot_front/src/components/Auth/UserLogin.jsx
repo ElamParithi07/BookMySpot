@@ -1,9 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { TbBrandAirbnb } from 'react-icons/tb'
 import { Link } from 'react-router-dom'
 import { FiArrowLeft } from "react-icons/fi";
 
 function UserLogin() {
+    const [ispasshow, setpasshow] = useState(false)
+
     return (
         <div className='w-screen h-screen flex items-center justify-center'>
             <div className='w-96 h-96 flex flex-col items-center gap-4' >
@@ -18,11 +20,11 @@ function UserLogin() {
                         className='w-full rounded-md p-2 border border-slate-300'
                         placeholder='Enter email address'
                     />
-                    <input
+                    {ispasshow && <input
                         type='text'
                         className='w-full rounded-md p-2 border border-slate-300'
                         placeholder='Enter password'
-                    />
+                    />}
                     <div className='flex justify-between'>
                         <div className='flex items-center gap-2'>
                             <input 
@@ -33,7 +35,9 @@ function UserLogin() {
                         </div>
                         <button className='text-primary text-xs md:text-sm'>Forgot your password?</button>
                     </div>
-                    <button className='w-full bg-primary h-10 text-white rounded-md'>Login</button>
+                    <button className='w-full bg-primary h-10 text-white rounded-md'>
+                        <Link to={'/otpauth'}>Send OTP</Link>
+                    </button>
                 </form>
                 <div className='flex items-center justify-center gap-2 cursor-pointer'>
                     <FiArrowLeft/>

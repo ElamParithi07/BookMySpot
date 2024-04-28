@@ -2,7 +2,7 @@ import React from 'react'
 import { FaChevronDown } from 'react-icons/fa6'
 import { Link } from 'react-router-dom'
 
-function ReserveSpotCard() {
+function ConfirmBookingCard() {
     return (
         <div className='hidden w-0 h-4/6 md:flex md:w-4/6 justify-center'>
             <div className='w-96 bg-white flex flex-col shadow-md rounded-xl border border-slate-200 p-5 justify-between gap-3'>
@@ -57,4 +57,4 @@ function ReserveSpotCard() {
     )
 }
 
-export default ReserveSpotCard
+export default ConfirmBookingCard

@@ -10,6 +10,7 @@ import { BsMap } from 'react-icons/bs';
 import { BsTag } from 'react-icons/bs';
 import { VscSparkle } from 'react-icons/vsc';
 import ReserveSpotCard from './ReserveSpotCard';
+import UserReview from './UserReview';
 
 function SpotDetails() {
     const imageUrl =
@@ -210,6 +211,9 @@ function SpotDetails() {
             </div>
             <div className='h-px w-full bg-slate-300 my-7 rounded'></div>
             {/* Reviews text*/}
+            <div className='w-full'>
+                <UserReview imageUrl={imageUrl} rating={2} />
+            </div>
         </div>
     );
 }
