@@ -1,9 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { TbBrandAirbnb } from 'react-icons/tb';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import axios from 'axios'
+
 
 function OtpVerification() {
-    const [otp, setOtp] = useState("");
+    const navigate = useNavigate()
+    const location = useLocation();
+    const [email, setEmail] = useState("")
     const inputRefs = [
         useRef(null),
         useRef(null),
@@ -13,31 +17,66 @@ function OtpVerification() {
         useRef(null)
     ];
 
+    useEffect(()=>{
+        if(location.state){
+            setEmail(location.state.email)
+        }
+        const token = localStorage.getItem('authtoken')
+        if(token){
+            navigate('/')
+        }
+    },[])
+    
     const handleInput = (index, event) => {
         const value = event.target.value;
-        let newOtp = otp;
         if (value === "") {
             // If the input is empty, do nothing
-            // Delete the digit from the OTP
-            newOtp = newOtp.slice(0, index) + newOtp.slice(index + 1);
-        } else {
-            // Update the OTP with the entered digit
-            newOtp = newOtp.slice(0, index) + value + newOtp.slice(index + 1);
+        } else if (value.length === 1 && index < inputRefs.length - 1) {
             // Focus on the next input field if a digit is entered
-            if (index < inputRefs.length - 1) {
-                inputRefs[index + 1].current.focus();
+            inputRefs[index + 1].current.focus();
+        }
+    };
+
+    const handleBackspace = (index, event) => {
+        if (event.key === 'Backspace' && !event.target.value) {
+            event.preventDefault();
+            if (index > 0 && inputRefs[index - 1].current) {
+                inputRefs[index - 1].current.focus();
+                // Delete the number in the previous input field
+                inputRefs[index - 1].current.value = "";
             }
         }
-        setOtp(newOtp);
     };
 
     useEffect(() => {
         inputRefs[0].current.focus();
     }, []);
 
-    const sendOtp =()=>{
-        console.log(otp)
-    }
+    const handleLogin = async () => {
+        let otp = '';
+        for (let i = 0; i < inputRefs.length; i++) {
+            otp += inputRefs[i].current.value;
+        }
+        if(otp.length!=6){
+            alert("Enter Full OTP")
+            return;
+        }
+        try{
+            const response = await axios.post('http://localhost:8081/auth/verifyotp',{email,otp})
+            const responseData = response.data
+            console.log(responseData)
+            if(responseData.status == false){
+                alert(responseData.message)
+                return;
+            }
+            localStorage.setItem('authToken',responseData.authtoken)
+            alert(responseData.message)
+            navigate('/');
+        }
+        catch(error){
+            console.log(error)
+        }
+    };
 
     return (
         <div className='w-screen h-screen flex items-center justify-center'>
@@ -55,12 +94,12 @@ function OtpVerification() {
                             className='w-full md:w-4/5 h-10 md:h-14 rounded-md p-2 md:p-4 border border-slate-300 text-lg focus:outline-none'
                             maxLength={1}
                             ref={inputRef}
-                            value={otp[index] || ''}
                             onChange={(e) => handleInput(index, e)}
+                            onKeyDown={(e) => handleBackspace(index, e)}
                         />
                     ))}
                 </div>
-                <button className='w-4/5 md:w-full bg-primary h-10 text-white rounded-md' onClick={sendOtp}>
+                <button className='w-4/5 md:w-full bg-primary h-10 text-white rounded-md' onClick={handleLogin}>
                     Verify
                 </button>
             </div>

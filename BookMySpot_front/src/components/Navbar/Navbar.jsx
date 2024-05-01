@@ -22,11 +22,11 @@ function Sidebar({ isOpen, handlesidebar }) {
                 <ul className='h-full flex flex-col justify-evenly'>
                     <li className='sidebariconbox'>
                         <IoHomeOutline className='text-3xl text-primary' />
-                        <p className='text-primary text-base'>Home</p>
+                        <Link to={'/'} className='text-primary text-base'>Home</Link>
                     </li>
                     <li className='sidebariconbox'>
                         <GoSearch className='text-3xl text-slate-600' />
-                        <p className='text-base'>Experiences</p>
+                        <Link to={'/explore'}><p className='text-base'>Explore</p></Link>
                     </li>
                     <li className='sidebariconbox'>
                         <FaUserCircle className='text-3xl text-slate-600' />
@@ -41,6 +41,7 @@ function Sidebar({ isOpen, handlesidebar }) {
 function Navbar() {
     const location = useLocation();
     const isHomePage = location.pathname === '/';
+    const isexplore = location.pathname === '/explore'
     const [isOpen, setOpen] = useState(false);
     const handlesidebar = () => {
         setOpen(!isOpen);
@@ -75,20 +76,20 @@ function Navbar() {
             <div className='pt-40 md:pt-24'>
                 <Outlet />
             </div>
-            {isHomePage && <div className="flex fixed bottom-0 w-screen h-20 bg-white border-t justify-evenly items-center md:hidden">
+            {isHomePage || isexplore ? <div className="flex fixed bottom-0 w-screen h-20 bg-white border-t justify-evenly items-center md:hidden">
                 <div className='bottomiconbox'>
                     <IoHomeOutline className='text-2xl text-primary' />
-                    <p className='text-primary text-xs'>Home</p>
+                    <Link to={'/'} className='text-primary text-xs'>Home</Link>
                 </div>
                 <div className='bottomiconbox'>
                     <GoSearch className='text-2xl text-slate-600' />
-                    <p className='text-xs'>Experiences</p>
+                    <Link to={'/explore'} className='text-xs'>Explore</Link>
                 </div>
                 <div className='bottomiconbox'>
                     <FaUserCircle className='text-2xl text-slate-600' />
-                    <p className='text-xs'>Login</p>
+                    <Link to={'/login'} className='text-xs'>Login</Link>
                 </div>
-            </div>}
+            </div>:<></>}
         </>
     )
 }

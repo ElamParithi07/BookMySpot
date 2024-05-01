@@ -1,43 +1,33 @@
 import React from 'react'
 import { FaChevronDown } from 'react-icons/fa6'
 import { Link } from 'react-router-dom'
+import { IoStarSharp } from "react-icons/io5";
 
 function ConfirmBookingCard() {
+    const imageUrl =
+        'https://a0.muscache.com/im/pictures/miso/Hosting-5264493/original/10d2c21f-84c2-46c5-b20b-b51d1c2c971a.jpeg?im_w=1200';
+
     return (
-        <div className='hidden w-0 h-4/6 md:flex md:w-4/6 justify-center'>
+        <div className='hidden w-0 h-96 md:flex md:w-5/6 justify-center'>
             <div className='w-96 bg-white flex flex-col shadow-md rounded-xl border border-slate-200 p-5 justify-between gap-3'>
-                <div className='flex items-end gap-1'>
-                    <p className='font-medium text-xl'>$3,951</p>
-                    <p>night</p>
-                </div>
-                <div className='border rounded-xl'>
-                    <div className='flex'>
-                        <div className='w-1/2 p-4 border-r-2'>
-                            <p className='font-semibold text-sm overflow-hidden'>CHECK-IN</p>
-                            <p className='text-xs overflow-hidden'>23/04/2023</p>
-                        </div>
-                        <div className='w-1/2 p-4'>
-                            <p className='font-semibold text-sm overflow-hidden'>CHECKOUT</p>
-                            <p className='text-xs overflow-hidden'>25/04/2023</p>
+                <div className='flex gap-2'>
+                    <div>
+                        <img className='h-24 w-34 rounded-md' src={imageUrl} />
+                    </div>
+                    <div>
+                        <p className='text-base font-medium'>Hills Cottage - Private Pool Villa and Nandi Hills</p>
+                        <p className='text-sm text-slate-400'>Entire cottage</p>
+                        <div className='flex items-center'>
+                            <IoStarSharp className='text-sm'/>
+                            <p className='text-sm'>4.89 (129 reviews)</p>
                         </div>
                     </div>
-                    <div className='flex justify-between items-center p-4 border-t-2'>
-                        <div>
-                            <p className='font-semibold text-sm overflow-hidden'>Guests</p>
-                            <p className='text-xs overflow-hidden'>1</p>
-                        </div>
-                        <FaChevronDown />
-                    </div>
                 </div>
-                <div className='bg-primary w-full h-12 rounded-xl flex items-center justify-center cursor-pointer'>
-                    <Link to={'/book'}><p className='text-white'>Reserve</p></Link>
-                </div>
-                <div className='text-center'>
-                    <p className='text-sm'>You won't be charged yet</p>
-                </div>
-                <div className='flex flex-col gap-2'>
+                <div className='h-px w-full bg-slate-300 rounded'></div>
+                <div className='flex flex-col gap-4'>
+                    <p className='text-xl font-medium'>Price details</p>
                     <div className='flex justify-between'>
-                        <p className='underline'>₹14,834 x 5 nights</p>
+                        <p className=''>₹14,834 x 5 nights</p>
                         <p>₹74,171</p>
                     </div>
                     <div className='flex justify-between'>
@@ -45,10 +35,10 @@ function ConfirmBookingCard() {
                         <p>₹12,164</p>
                     </div>
                 </div>
-                <div className='h-px w-full bg-slate-300 my-7 rounded'></div>
+                <div className='h-px w-full bg-slate-300  rounded'></div>
                 <div className='flex flex-col gap-2'>
                     <div className='flex justify-between'>
-                        <p className='font-medium'>Total before taxes</p>
+                        <p className='font-medium'>Total(INR)</p>
                         <p className='font-medium'>₹86,335</p>
                     </div>
                 </div>

@@ -6,6 +6,7 @@ import UserLogin from "./components/Auth/UserLogin";
 import UserSignup from "./components/Auth/UserSignup";
 import OtpVerification from "./components/Auth/OtpVerification";
 import SpotBookingpage from "./components/SpotDetails/BookingContent/SpotBookingpage";
+import Explore from "./components/Explore/Explore";
 
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
           <Route path="/" element={<Home/>}></Route>
           <Route path="/spots/:id" element={<SpotPage/>}></Route>
           <Route path="/book" element={<SpotBookingpage/>}></Route>
+          <Route path="/explore" element={<Explore/>}></Route>
         </Route>
         <Route path="/login" element={<UserLogin/>}></Route>
         <Route path="/signup" element={<UserSignup/>}></Route>

@@ -20,9 +20,9 @@ function HomePageBody() {
     return (
         <div className='w-full flex flex-wrap justify-start py-6 md:gap-0  md:my-20 '>
             <PlaceCard name={"Alex Hormozi"} rating={"4.7"} key={1} imageurl={"https://imdb.com"} id={1} />
-            <PlaceCard name={"Alex Hormozi"} rating={"4.7"} key={1} imageurl={"https://imdb.com"} id={1} />
-            <PlaceCard name={"Alex Hormozi"} rating={"4.7"} key={1} imageurl={"https://imdb.com"} id={1} />
-            <PlaceCard name={"Alex Hormozi"} rating={"4.7"} key={1} imageurl={"https://imdb.com"} id={1} />
+            <PlaceCard name={"Alex Hormozi"} rating={"4.7"} key={2} imageurl={"https://imdb.com"} id={1} />
+            <PlaceCard name={"Alex Hormozi"} rating={"4.7"} key={3} imageurl={"https://imdb.com"} id={1} />
+            <PlaceCard name={"Alex Hormozi"} rating={"4.7"} key={4} imageurl={"https://imdb.com"} id={1} />
         </div>
     );
 }
