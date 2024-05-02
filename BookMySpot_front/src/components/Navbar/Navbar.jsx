@@ -10,8 +10,9 @@ import NavSearchbar from './NavSearchbar';
 import { TbBrandAirbnb } from "react-icons/tb";
 import HomeheaderBar from '../Home/HomeheaderBar';
 import { useLocation } from 'react-router-dom'
+import { useUserstate } from '../../Context/UserContext';
 
-function Sidebar({ isOpen, handlesidebar }) {
+function Sidebar({ isOpen, handlesidebar, isloggedIn }) {
     return (
         <div className={`fixed flex flex-col h-screen w-1/4 bg-white shadow-md transition-all duration-300 ${isOpen ? 'right-0 z-50' : '-right-full z-0'}`}>
             <div className='flex items-start justify-between h-1/4 p-6'>
@@ -30,7 +31,7 @@ function Sidebar({ isOpen, handlesidebar }) {
                     </li>
                     <li className='sidebariconbox'>
                         <FaUserCircle className='text-3xl text-slate-600' />
-                        <Link className='text-base' to={'/login'}>Login</Link>
+                        {isloggedIn?<p className='text-base'>Profile</p>:<Link to={'/login'} className='text-base'>Login</Link>}
                     </li>
                 </ul>
             </div>
@@ -39,6 +40,7 @@ function Sidebar({ isOpen, handlesidebar }) {
 }
 
 function Navbar() {
+    const { isloggedIn, refreshOtherPages} = useUserstate();
     const location = useLocation();
     const isHomePage = location.pathname === '/';
     const isexplore = location.pathname === '/explore'
@@ -46,9 +48,10 @@ function Navbar() {
     const handlesidebar = () => {
         setOpen(!isOpen);
     }
+    console.log(isloggedIn)
     return (
         <>
-            <Sidebar handlesidebar={handlesidebar} isOpen={isOpen} />
+            <Sidebar handlesidebar={handlesidebar} isOpen={isOpen} isloggedIn={isloggedIn}/>
             <nav className='fixed bg-white w-full md:w-full flex flex-col gap-2 justify-between px-6 py-4 border-t shadow-sm'>
                 <div className='flex flex-col justify-between md:flex-row gap-2 md:mt-1'>
                     <div className='basis-1/3 flex items-center gap-row-2'>
@@ -87,7 +90,7 @@ function Navbar() {
                 </div>
                 <div className='bottomiconbox'>
                     <FaUserCircle className='text-2xl text-slate-600' />
-                    <Link to={'/login'} className='text-xs'>Login</Link>
+                    {isloggedIn?<p className='text-xs'>ProfileP</p>:<Link to={'/login'} className='text-xs'>Login</Link>}
                 </div>
             </div>:<></>}
         </>

@@ -4,9 +4,13 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { FiArrowLeft } from "react-icons/fi";
 import { FcGoogle } from 'react-icons/fc';
 import axios from 'axios';
-
+import { useUserstate } from '../../Context/UserContext';
+import { Bounce } from "react-activity";
+import "react-activity/dist/library.css";
 
 function UserLogin() {
+    const {isloggedIn, refreshOtherPages } = useUserstate()
+    const [ otpindicator, setOtpindicator] = useState(false)
     const navigate = useNavigate();
     const location = useLocation();
     const [email, setEmail] = useState("")
@@ -26,6 +30,8 @@ function UserLogin() {
 
     const handleOtp = async (e) => {
         e.preventDefault();
+        console.log("inside login")
+        setOtpindicator(true)
         try {
             if (ispasshow) {
                 const newErrors = {}
@@ -35,22 +41,26 @@ function UserLogin() {
                 if (!password) {
                     newErrors[password] = "Password is required"
                     setErrors(newErrors)
+                    setOtpindicator(false)
                     return;
                 }
                 if (password.length < 6) {
                     newErrors[password] = "Password must be atleast 6 characters"
                     setErrors(newErrors)
+                    return;
                 }
             }
             else {
                 if (!email) {
                     setErrors({ email: "Email is required" })
+                    setOtpindicator(false)
                     return;
                 }
             }
             const validres = await axios.post('http://localhost:8081/auth/verifyemail', { email })
             if (validres.data.status == false) {
                 setErrors({ email: validres.data.message })
+                setOtpindicator(false)
                 return;
             }
             setErrors({})
@@ -58,15 +68,24 @@ function UserLogin() {
             if (otpresponse.data.status == false) {
                 alert(otpresponse.data.message)
                 setpasshow(true)
+                setOtpindicator(false)
                 return;
             }
+            setOtpindicator(false)
+            alert(otpresponse.data.message)
             navigate('/otpauth', { state: { email } })
         }
         catch (error) {
+            setOtpindicator(false)
             console.log(error)
         }
     }
 
+    if(isloggedIn){
+        return (
+            <div>You're already logged in.</div>
+        )
+    }
     return (
         <div className='w-screen h-screen flex items-center justify-center'>
             <div className='w-96 h-96 flex flex-col items-center gap-4' >
@@ -109,9 +128,9 @@ function UserLogin() {
                     </div>
                     <button
                         className='w-full bg-primary h-10 text-white rounded-md'
-                        type='submit'
+                        type={!otpindicator? 'submit':'button'}
                     >
-                        Send OTP
+                        {otpindicator?<Bounce color="#ffff" size={12} speed={1} animating={true} />:"Send OTP"}
                     </button>
                 </form>
                 <div className='w-full flex flex-col items-center gap-2'>

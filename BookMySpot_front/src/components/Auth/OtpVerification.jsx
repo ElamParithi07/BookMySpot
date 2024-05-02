@@ -2,9 +2,11 @@ import React, { useEffect, useRef, useState } from 'react';
 import { TbBrandAirbnb } from 'react-icons/tb';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios'
+import { useUserstate } from '../../Context/UserContext';
 
 
 function OtpVerification() {
+    const { isloggedIn, refreshOtherPages} = useUserstate();
     const navigate = useNavigate()
     const location = useLocation();
     const [email, setEmail] = useState("")
@@ -18,14 +20,12 @@ function OtpVerification() {
     ];
 
     useEffect(()=>{
+        inputRefs[0].current.focus();
         if(location.state){
             setEmail(location.state.email)
         }
-        const token = localStorage.getItem('authtoken')
-        if(token){
-            navigate('/')
-        }
     },[])
+
     
     const handleInput = (index, event) => {
         const value = event.target.value;
@@ -48,9 +48,6 @@ function OtpVerification() {
         }
     };
 
-    useEffect(() => {
-        inputRefs[0].current.focus();
-    }, []);
 
     const handleLogin = async () => {
         let otp = '';
@@ -71,12 +68,19 @@ function OtpVerification() {
             }
             localStorage.setItem('authToken',responseData.authtoken)
             alert(responseData.message)
+            refreshOtherPages();
             navigate('/');
         }
         catch(error){
             console.log(error)
         }
     };
+
+    if(isloggedIn){
+        return (
+            <div>You're already logged in</div>
+        )
+    }
 
     return (
         <div className='w-screen h-screen flex items-center justify-center'>

@@ -6,6 +6,7 @@ import { FcGoogle } from 'react-icons/fc';
 import * as Yup from 'yup'
 import axios from 'axios'
 import  {useNavigate}  from 'react-router-dom';
+import { useUserstate } from '../../Context/UserContext';
 
 
 const initialState = {
@@ -28,6 +29,7 @@ const reducer = (state, action) => {
 }
 
 function UserSignup() {
+    const { isloggedIn, refreshOtherPages} = useUserstate();
     const navigate = useNavigate();
     const [state, dispatch] = useReducer(reducer, initialState);
     const [Errors, setErrors] = useState({
@@ -70,6 +72,12 @@ function UserSignup() {
             })
             setErrors(newErrors)
         }
+    }
+
+    if(isloggedIn){
+        return (
+            <div>you're already logged in</div>
+        )
     }
 
     return (

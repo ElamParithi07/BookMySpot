@@ -7,11 +7,13 @@ import UserSignup from "./components/Auth/UserSignup";
 import OtpVerification from "./components/Auth/OtpVerification";
 import SpotBookingpage from "./components/SpotDetails/BookingContent/SpotBookingpage";
 import Explore from "./components/Explore/Explore";
+import { UserProvider } from "./Context/UserContext";
 
 
 function App() {
   return (
-    <BrowserRouter>
+    <UserProvider>
+      <BrowserRouter>
       <Routes>
         <Route path="/" element={<Navbar/>}>
           <Route path="/" element={<Home/>}></Route>
@@ -24,6 +26,7 @@ function App() {
         <Route path="/otpauth" element={<OtpVerification/>}></Route>
       </Routes>
     </BrowserRouter>
+    </UserProvider>
   );
 }
 
