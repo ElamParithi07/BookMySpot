@@ -8,8 +8,8 @@ function ConfirmBookingCard() {
         'https://a0.muscache.com/im/pictures/miso/Hosting-5264493/original/10d2c21f-84c2-46c5-b20b-b51d1c2c971a.jpeg?im_w=1200';
 
     return (
-        <div className='hidden w-0 h-96 md:flex md:w-5/6 justify-center'>
-            <div className='w-96 bg-white flex flex-col shadow-md rounded-xl border border-slate-200 p-5 justify-between gap-3'>
+        <div className='w-80 md:h-96 md:flex md:w-5/6 justify-center'>
+            <div className='w-80 md:w-96 bg-white flex flex-col shadow-md rounded-xl border border-slate-200 p-5 justify-between gap-3'>
                 <div className='flex gap-2'>
                     <div>
                         <img className='h-24 w-34 rounded-md' src={imageUrl} />

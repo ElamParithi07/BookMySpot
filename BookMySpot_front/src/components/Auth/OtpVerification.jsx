@@ -6,7 +6,7 @@ import { useUserstate } from '../../Context/UserContext';
 
 
 function OtpVerification() {
-    const { isloggedIn, refreshOtherPages} = useUserstate();
+    const { isloggedIn, refreshOtherPages } = useUserstate();
     const navigate = useNavigate()
     const location = useLocation();
     const [email, setEmail] = useState("")
@@ -19,14 +19,7 @@ function OtpVerification() {
         useRef(null)
     ];
 
-    useEffect(()=>{
-        inputRefs[0].current.focus();
-        if(location.state){
-            setEmail(location.state.email)
-        }
-    },[])
 
-    
     const handleInput = (index, event) => {
         const value = event.target.value;
         if (value === "") {
@@ -52,9 +45,15 @@ function OtpVerification() {
     const handleLogin = async () => {
         let otp = '';
         for (let i = 0; i < inputRefs.length; i++) {
-            otp += inputRefs[i].current.value;
+            // Check if ref is not null before accessing current property
+            if (inputRefs[i].current) {
+                otp += inputRefs[i].current.value;
+            } else {
+                // Handle the case where ref is null (optional)
+                console.error(`Ref at index ${i} is null`);
+            }
         }
-        if(otp.length!=6){
+        if(otp.length !== 6){
             alert("Enter Full OTP")
             return;
         }
@@ -62,11 +61,11 @@ function OtpVerification() {
             const response = await axios.post('http://localhost:8081/auth/verifyotp',{email,otp})
             const responseData = response.data
             console.log(responseData)
-            if(responseData.status == false){
+            if(responseData.status === false){
                 alert(responseData.message)
                 return;
             }
-            localStorage.setItem('authToken',responseData.authtoken)
+            localStorage.setItem('authtoken',responseData.authtoken)
             alert(responseData.message)
             refreshOtherPages();
             navigate('/');
@@ -75,12 +74,22 @@ function OtpVerification() {
             console.log(error)
         }
     };
+    
 
-    if(isloggedIn){
+    if (isloggedIn) {
+        console.log("inside log")
         return (
             <div>You're already logged in</div>
         )
     }
+
+
+    useEffect(() => {
+        inputRefs[0].current.focus();
+        if (location.state) {
+            setEmail(location.state.email)
+        }
+    }, [])
 
     return (
         <div className='w-screen h-screen flex items-center justify-center'>

@@ -7,26 +7,37 @@ function ReserveSpotCard() {
         <div className='hidden w-0 h-4/6 md:flex md:w-4/6 justify-center'>
             <div className='w-96 bg-white flex flex-col shadow-md rounded-xl border border-slate-200 p-5 justify-between gap-3'>
                 <div className='flex items-end gap-1'>
-                    <p className='font-medium text-xl'>$3,951</p>
-                    <p>night</p>
+                    <p className='font-medium text-xl'>₹1,250</p>
+                    <p>/ hr</p>
                 </div>
                 <div className='border rounded-xl'>
                     <div className='flex'>
                         <div className='w-1/2 p-4 border-r-2'>
-                            <p className='font-semibold text-sm overflow-hidden'>CHECK-IN</p>
-                            <p className='text-xs overflow-hidden'>23/04/2023</p>
+                            <p className='font-semibold text-sm overflow-hidden'>Date</p>
+                            <input type='date' className='text-sm overflow-hidden'/>
                         </div>
                         <div className='w-1/2 p-4'>
-                            <p className='font-semibold text-sm overflow-hidden'>CHECKOUT</p>
-                            <p className='text-xs overflow-hidden'>25/04/2023</p>
+                            <p className='font-semibold text-sm overflow-hidden'>No. of Hours</p>
+                            <p className='text-base overflow-hidden'>1</p>
                         </div>
                     </div>
                     <div className='flex justify-between items-center p-4 border-t-2'>
-                        <div>
-                            <p className='font-semibold text-sm overflow-hidden'>Guests</p>
-                            <p className='text-xs overflow-hidden'>1</p>
+                        <div className='w-full'>
+                            <p className='font-semibold text-sm overflow-hidden'>My Slots</p>
+                            <select className='text-base overflow-hidden w-full p-3 bg-white scroll-y-auto'>
+                                <option value={"1"}>10 AM - 11 AM</option>
+                                <option value={"2"}>11 AM - 12 AM</option>
+                                <option value={"3"}>12 AM - 1 PM</option>
+                                <option value={"4"}>12 AM - 1 PM</option>
+                                <option value={"5"}>1 PM - 2 PM</option>
+                                <option value={"6"}>2 PM - 3 PM</option>
+                                <option value={"7"}>3 PM - 4 PM</option>
+                                <option value={"8"}>4 PM - 5 PM</option>
+                                <option value={"9"}>5 PM - 6 PM</option>
+                                <option value={"10"}>6 PM - 7 PM</option>
+                                <option value={"11"}>7 PM - 8 PM</option>
+                            </select>
                         </div>
-                        <FaChevronDown />
                     </div>
                 </div>
                 <div className='bg-primary w-full h-12 rounded-xl flex items-center justify-center cursor-pointer'>
@@ -37,19 +48,19 @@ function ReserveSpotCard() {
                 </div>
                 <div className='flex flex-col gap-2'>
                     <div className='flex justify-between'>
-                        <p className='underline'>₹14,834 x 5 nights</p>
-                        <p>₹74,171</p>
+                        <p className='underline'>₹1,250 x 2 hours</p>
+                        <p>₹2,500</p>
                     </div>
                     <div className='flex justify-between'>
-                        <p className='underline'>Airbnb service fee</p>
-                        <p>₹12,164</p>
+                        <p className='underline'>BookMySpot service fee</p>
+                        <p>₹0</p>
                     </div>
                 </div>
                 <div className='h-px w-full bg-slate-300 my-7 rounded'></div>
                 <div className='flex flex-col gap-2'>
                     <div className='flex justify-between'>
-                        <p className='font-medium'>Total before taxes</p>
-                        <p className='font-medium'>₹86,335</p>
+                        <p className='font-medium'>Total</p>
+                        <p className='font-medium'>₹2,500</p>
                     </div>
                 </div>
             </div>

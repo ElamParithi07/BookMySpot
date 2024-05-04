@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
 import SpotImageGrid from './SpotImageGrid';
 import { CiExport } from "react-icons/ci";
@@ -39,13 +39,26 @@ function SpotPage() {
                         <p className='text-sm md:text-base'>Share</p>
                     </div>
                     <div className='flex items-center justify-center gap-1'>
-                        <CiHeart className='text-lg md:text-2xl'/>
+                        <CiHeart className='text-lg md:text-2xl' />
                         <p className='text-sm md:text-base'>Save</p>
                     </div>
                 </div>
             </div>
             <SpotImageGrid />
-            <SpotDetails/>
+            <SpotDetails />
+            <div className="flex fixed bottom-0 w-full h-16 bg-white border-t justify-between items-center md:hidden">
+                <div className='flex flex-col h-full justify-center'>
+                    <p className='text-base font-semibold'>
+                        ₹1,834 / hr
+                    </p>
+                    <p className='text-xs'>
+                        You won't be charged yet
+                    </p>
+                </div>
+                <div className='bg-primary w-36 h-3/5 py-5 mr-10 rounded-xl flex items-center justify-center cursor-pointer'>
+                    <Link to={'/book'}><p className='text-white'>Reserve</p></Link>
+                </div>
+            </div>
         </div>
     );
 }

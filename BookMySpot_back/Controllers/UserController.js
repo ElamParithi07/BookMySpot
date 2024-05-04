@@ -119,7 +119,7 @@ async function verifyotp(req, res) {
             const authtoken = jwt.sign({ email: email }, key);
             return res.status(200).json({status:true, message: "Login successful!", authtoken: authtoken });
         } else {
-            return res.status(404).json({status:false, message: "Invalid OTP" });
+            return res.json({status:false, message: "Invalid OTP" });
         }
     } catch (error) {
         console.log(error);
