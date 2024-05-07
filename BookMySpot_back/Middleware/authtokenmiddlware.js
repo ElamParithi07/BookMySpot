@@ -21,6 +21,11 @@ async function checkauthtoken(req,res, next){
         if(!isValid){
             return res.status(400).json({message:"Invalid Auth Token"})
         }
+        console.log(isValid)
+        req.locals= {
+            userid:isValid.id,
+            email:decoded.email
+        }
         next();
     }
     catch(error){

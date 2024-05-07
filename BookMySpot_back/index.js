@@ -4,6 +4,7 @@ const cors = require('cors')
 const client = require('./Redis')
 
 const UserRouter = require('./Routes/UserRouter')
+const AddSpotRouter = require('./Routes/AddSpotRouter')
 
 require('dotenv').config()
 const app = express();
@@ -16,6 +17,7 @@ app.use(cors({
 }))
 app.use(express.json())
 app.use('/auth',UserRouter)
+app.use('/spot',AddSpotRouter)
 
 mongoose.connect(process.env.MONGO_URL)
     .then(() => {
@@ -25,6 +27,6 @@ mongoose.connect(process.env.MONGO_URL)
         console.log(err)
     })
 
-app.listen(process.env.PORT, () => {
+app.listen(process.env.PORT || 8000, () => {
     console.log("Server started!");
 })

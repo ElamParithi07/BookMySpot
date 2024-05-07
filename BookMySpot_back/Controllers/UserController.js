@@ -114,10 +114,13 @@ async function verifyotp(req, res) {
             return res.json({ status:false, message: "OTP expired!" });
         }
 
+        //check if otp is valid
         if (value === otp) {
+            const user = await User.findOne({email:email})
+
             // Create auth token
             const authtoken = jwt.sign({ email: email }, key);
-            return res.status(200).json({status:true, message: "Login successful!", authtoken: authtoken });
+            return res.status(200).json({status:true, message: "Login successful!", authtoken: authtoken, msatoken: user.myspot });
         } else {
             return res.json({status:false, message: "Invalid OTP" });
         }
@@ -148,13 +151,19 @@ async function checkvalidemail(req, res) {
     }
 }
 
-async function checktoken(req,res){
-    const token = req.headers.authorization;
-    
-
+async function getUser(req,res){
+    try{
+        const email = req.locals.email;
+        const user = await User.findOne({email});
+        if(user){
+            return res.status(200).json({data:user})
+        }
+        return res.status(404).json({message:"User Not Found"})
+    }
+    catch(error){
+        return res.json({message:error})
+    }
 }
-
-
 
 async function generateotp() {
     const otp = await OtpGenerator.generate(6, { digits: true, lowerCaseAlphabets: false, upperCaseAlphabets: false, specialChars: false })
@@ -197,4 +206,4 @@ async function sendMail(email, otp) {
 
 
 
-module.exports = { register, sendotp, verifyotp, checkvalidemail }
+module.exports = { register, sendotp, verifyotp, checkvalidemail, getUser }
