@@ -11,7 +11,7 @@ const MySpot =new mongoose.model('myspots',mongoose.Schema({
     location:{type:String, required:true},
     gmaplink:{type:String},
     slots:[
-        {type:String, required:true}
+        {type:mongoose.Schema.Types.ObjectId, ref:'Slot'}
     ],
     phonenumber:{type:String, required:true},
     feeperhour:{type:String, required:true},

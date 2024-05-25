@@ -18,11 +18,11 @@ function HomeheaderBar() {
                 </li>
                 <li className='sidebariconbox'>
                     <PiPark className='homebaricon' />
-                    <p className='homebartext'>National Parks</p>
+                    <p className='homebartext'>Turfs</p>
                 </li>
                 <li className='sidebariconbox'>
                     <HiOutlineHomeModern className='homebaricon' />
-                    <p className='homebartext'>Lakefront</p>
+                    <p className='homebartext'>Swimming Pools</p>
                 </li>
                 <li className='sidebariconbox'>
                     <BsCupHot className='homebaricon' />
@@ -30,19 +30,19 @@ function HomeheaderBar() {
                 </li>
                 <li className='sidebariconbox'>
                     <PiBuildings className='homebaricon' />
-                    <p className='homebartext'>Design</p>
+                    <p className='homebartext'>Hair Spa</p>
                 </li>
-                <li className='sidebariconbox'>
+                {/* <li className='sidebariconbox'>
                     <TbUfo className='homebaricon' />
                     <p className='homebartext'>OMG!</p>
-                </li>
+                </li> */}
                 <li className='sidebariconbox'>
                     <IoSnowOutline className='homebaricon' />
-                    <p className='homebartext'>Arctic</p>
+                    <p className='homebartext'>Makeup Artist</p>
                 </li>
                 <li className='sidebariconbox'>
                     <GiIsland className='homebaricon' />
-                    <p className='homebartext'>Island</p>
+                    <p className='homebartext'>Party Halls</p>
                 </li>
             </ul>
         </div>

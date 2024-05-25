@@ -57,14 +57,14 @@ function UserLogin() {
                     return;
                 }
             }
-            const validres = await axios.post('http://localhost:8081/auth/verifyemail', { email })
+            const validres = await axios.post('http://localhost:8083/auth/verifyemail', { email })
             if (validres.data.status == false) {
                 setErrors({ email: validres.data.message })
                 setOtpindicator(false)
                 return;
             }
             setErrors({})
-            const otpresponse = await axios.post('http://localhost:8081/auth/sendotp', { email, password })
+            const otpresponse = await axios.post('http://localhost:8083/auth/sendotp', { email, password })
             if (otpresponse.data.status == false) {
                 alert(otpresponse.data.message)
                 setpasshow(true)
@@ -77,7 +77,7 @@ function UserLogin() {
         }
         catch (error) {
             setOtpindicator(false)
-            console.log(error)
+            console.log(error.response)
         }
     }
 

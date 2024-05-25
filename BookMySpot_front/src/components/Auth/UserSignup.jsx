@@ -51,7 +51,7 @@ function UserSignup() {
             setErrors({});
             console.log('Form submitted:', state.email, state.password);
             try {
-                const response = await axios.post('http://localhost:8081/auth/register', { email: state.email, password: state.password });
+                const response = await axios.post('http://localhost:8083/auth/register', { email: state.email, password: state.password });
                 if(response.data.status==false){
                     alert(response.data.message)
                     return;

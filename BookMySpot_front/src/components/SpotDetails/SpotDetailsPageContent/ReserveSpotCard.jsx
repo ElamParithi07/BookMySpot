@@ -2,12 +2,12 @@ import React from 'react'
 import { FaChevronDown } from 'react-icons/fa6'
 import { Link } from 'react-router-dom'
 
-function ReserveSpotCard() {
+function ReserveSpotCard({data}) {
     return (
         <div className='hidden w-0 h-4/6 md:flex md:w-4/6 justify-center'>
             <div className='w-96 bg-white flex flex-col shadow-md rounded-xl border border-slate-200 p-5 justify-between gap-3'>
                 <div className='flex items-end gap-1'>
-                    <p className='font-medium text-xl'>₹1,250</p>
+                    <p className='font-medium text-xl'>₹{data.feeperhour}</p>
                     <p>/ hr</p>
                 </div>
                 <div className='border rounded-xl'>
@@ -41,15 +41,15 @@ function ReserveSpotCard() {
                     </div>
                 </div>
                 <div className='bg-primary w-full h-12 rounded-xl flex items-center justify-center cursor-pointer'>
-                    <Link to={'/book'}><p className='text-white'>Reserve</p></Link>
+                    <Link to={`/book/${data._id}`}><p className='text-white'>Reserve</p></Link>
                 </div>
                 <div className='text-center'>
                     <p className='text-sm'>You won't be charged yet</p>
                 </div>
                 <div className='flex flex-col gap-2'>
                     <div className='flex justify-between'>
-                        <p className='underline'>₹1,250 x 2 hours</p>
-                        <p>₹2,500</p>
+                        <p className='underline'>₹{data.feeperhour} x 1 hours</p>
+                        <p>₹1000</p>
                     </div>
                     <div className='flex justify-between'>
                         <p className='underline'>BookMySpot service fee</p>
@@ -60,7 +60,7 @@ function ReserveSpotCard() {
                 <div className='flex flex-col gap-2'>
                     <div className='flex justify-between'>
                         <p className='font-medium'>Total</p>
-                        <p className='font-medium'>₹2,500</p>
+                        <p className='font-medium'>₹1000</p>
                     </div>
                 </div>
             </div>

@@ -12,7 +12,7 @@ import { VscSparkle } from 'react-icons/vsc';
 import ReserveSpotCard from './ReserveSpotCard';
 import UserReview from './UserReview';
 
-function SpotDetails() {
+function SpotDetails({data}) {
     const imageUrl =
         'https://a0.muscache.com/im/pictures/miso/Hosting-5264493/original/10d2c21f-84c2-46c5-b20b-b51d1c2c971a.jpeg?im_w=1200';
 
@@ -24,9 +24,9 @@ function SpotDetails() {
                 <div className='flex flex-col w-full md:w-4/5'>
                     <div className='flex flex-col gap-1'>
                         <p className='text-base md:text-xl font-medium'>
-                            Private room in nature lodge in India
+                            {data.about}
                         </p>
-                        <ul className='flex flex-wrap gap-2 md:gap-4'>
+                        {/* <ul className='flex flex-wrap gap-2 md:gap-4'>
                             <li className='placecardtext flex items-center'>
                                 <span className='mr-1'>16+ guests</span>
                             </li>
@@ -39,14 +39,14 @@ function SpotDetails() {
                             <li className='placecardtext flex items-center'>
                                 <span className='mr-1'>6.5 bathrooms</span>
                             </li>
-                        </ul>
+                        </ul> */}
                         <div className='flex items-center gap-3'>
                             <div className='flex gap-1 items-center'>
                                 <IoMdStar className='placecardtext' />
                                 <p className='placecardtext'>4.75</p>
                             </div>
                             <div className='flex gap-1 items-center'>
-                                <p className='placecardtext'>16</p>
+                                <p className='placecardtext'>1</p>
                                 <p className='placecardtext underline'>Reviews</p>
                             </div>
                         </div>
@@ -55,8 +55,8 @@ function SpotDetails() {
                     <div className='flex items-center gap-3'>
                         <img className='h-8 w-8 rounded-full' src={imageUrl} />
                         <div>
-                            <p className='text-sm md:text-base'>Hosted by Bopanna & Nirala</p>
-                            <p className='text-xs md:text-sm text-slate-400'>5 Years Hosting</p>
+                            <p className='text-sm md:text-base'>Hosted by {data.name}</p>
+                            <p className='text-xs md:text-sm text-slate-400'>{data.spotstatus?"Spot is Opened":"Spot is Closed"}</p>
                         </div>
                     </div>
                     <div className='h-px w-full md:w-5/6 bg-slate-300 my-7 rounded'></div>
@@ -95,7 +95,7 @@ function SpotDetails() {
                     <div className='w-full p-3 flex flex-col gap-3 items-start'>
                         <p className='font-medium text-base md:text-lg'>About the Place</p>
                         <p className='text-slate-800 text-sm md:text-base w-4/5'>
-                            Vanandhaara is a beautiful Villa & HomeStay in Coorg located on our Coffee plantation
+                            {data.name} is a beautiful Turf located on our Coffee plantation
                             and a just few minutes from the famous Nagarahole Tiger Reserve, Kabini, Brahmagiri
                             hills, Irpu falls & other attractions. We offer 6 exquisitely designed large & clean
                             rooms, each with a private balcony and private bathroom. Individual room's or the
@@ -105,11 +105,11 @@ function SpotDetails() {
                     </div>
                 </div>
                 {/* Reserve spot card */}
-                <ReserveSpotCard />
+                <ReserveSpotCard data={data}/>
             </div>
             <div className='h-px w-full bg-slate-300 my-7 rounded'></div>
             {/* Review rating section */}
-            <div className='w-full text-center'>
+            <div className='w-full text-center mb-10'>
                 <p className='font-semibold text-2xl'>Guest Reviews</p>
             </div>
             <div className='w-full py-6'>

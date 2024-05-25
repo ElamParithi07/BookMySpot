@@ -15,7 +15,9 @@ async function checkauthtoken(req,res, next){
 
     try{
         //verify jwt token for user
+        console.log(token)
         const decoded = jwt.verify(token, key)
+        console.log(decoded)
         const isValid = await User.findOne({email:decoded.email})
 
         if(!isValid){
@@ -29,8 +31,11 @@ async function checkauthtoken(req,res, next){
         next();
     }
     catch(error){
-        console.log(error)
-        return res.status(400).json({Error:"Invalid Auth Token"})
+        if(error.name === "TokenExpiredError"){
+            console.log("token expired")
+            return res.status(401).json({message:"Token Expired"})
+        }
+        return res.status(500).json({Error:"Invalid Auth Token"})
     }
 }
 

@@ -58,14 +58,19 @@ function OtpVerification() {
             return;
         }
         try{
-            const response = await axios.post('http://localhost:8081/auth/verifyotp',{email,otp})
+            const response = await axios.post('http://localhost:8083/auth/verifyotp',{email,otp})
             const responseData = response.data
             console.log(responseData)
             if(responseData.status === false){
                 alert(responseData.message)
                 return;
             }
+            localStorage.setItem('email',email)
             localStorage.setItem('authtoken',responseData.authtoken)
+            if(responseData.msatoken){
+                localStorage.setItem('msaToken', responseData.msatoken)
+            }
+            localStorage.setItem('refreshToken', responseData.refreshToken)
             alert(responseData.message)
             refreshOtherPages();
             navigate('/');
