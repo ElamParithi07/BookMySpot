@@ -5,7 +5,6 @@ require('dotenv').config()
 const key = process.env.SECRET_KEY
 
 async function checkauthtoken(req,res, next){
-    //req.headers.authorization to access token in the headers
     let token = req.headers.authorization;
 
     if(!token){
@@ -14,14 +13,13 @@ async function checkauthtoken(req,res, next){
     token = token.replace("Bearer ", "");
 
     try{
-        //verify jwt token for user
         console.log(token)
         const decoded = jwt.verify(token, key)
         console.log(decoded)
         const isValid = await User.findOne({email:decoded.email})
 
         if(!isValid){
-            return res.status(400).json({message:"Invalid Auth Token"})
+            return res.status(400).json({message:"Invalid Auth Token"});
         }
         console.log(isValid)
         req.locals= {

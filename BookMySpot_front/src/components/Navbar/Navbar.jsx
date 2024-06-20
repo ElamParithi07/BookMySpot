@@ -7,6 +7,7 @@ import { Link, Outlet, useNavigate } from 'react-router-dom';
 import { IoClose } from "react-icons/io5";
 import { CiGlobe } from "react-icons/ci";
 import NavSearchbar from './NavSearchbar';
+import { FaPlaceOfWorship } from "react-icons/fa6";
 import { TbBrandAirbnb } from "react-icons/tb";
 import HomeheaderBar from '../Home/HomeheaderBar';
 import { useLocation } from 'react-router-dom'
@@ -65,6 +66,7 @@ function Navbar() {
     const isexplore = location.pathname === '/explore'
     const isProfile = location.pathname === '/profile'
     const isLogin = location.pathname === '/login'
+    const isspot = location.pathname === '/addmyspot'
     const [isOpen, setOpen] = useState(false);
     const handlesidebar = () => {
         setOpen(!isOpen);
@@ -97,10 +99,10 @@ function Navbar() {
                     <HomeheaderBar />
                 </div>}
             </nav>
-            <div className='pt-40 md:pt-20'>
+            <div className='pt-28 md:pt-20'>
                 <Outlet />
             </div>
-            {isHomePage || isexplore || isProfile ? <div className="flex fixed bottom-0 w-screen h-20 bg-white border-t justify-evenly items-center md:hidden">
+            {isHomePage || isexplore || isProfile || isspot  ? <div className="flex fixed bottom-0 w-screen h-20 bg-white border-t justify-evenly items-center md:hidden">
                 <div className='bottomiconbox'>
                     <IoHomeOutline className={`text-2xl ${isHomePage ? "text-primary": "text-slate-600"}`}  />
                     <Link to={'/'} className={`${isHomePage ? "text-primary": "text-slate-600"} text-xs`}>Home</Link>
@@ -108,6 +110,10 @@ function Navbar() {
                 <div className='bottomiconbox'>
                     <GoSearch className={`text-2xl ${isexplore ? "text-primary": "text-slate-600"}`} />
                     <Link to={'/explore'} className={`text-xs ${isexplore ? "text-primary": "text-slate-600"}`}>Explore</Link>
+                </div>
+                <div className='bottomiconbox'>
+                    <FaPlaceOfWorship className={`text-2xl ${isspot ? "text-primary": "text-slate-600"}`} />
+                    <Link to={'/addmyspot'} className={`text-xs ${isspot ? "text-primary": "text-slate-600"}`}>MySpot</Link>
                 </div>
                 <div className='bottomiconbox'>
                     <FaUserCircle className={`text-2xl ${isProfile || isLogin ? "text-primary": "text-slate-600"}`} />

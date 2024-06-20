@@ -24,10 +24,10 @@ function HomeheaderBar() {
                     <HiOutlineHomeModern className='homebaricon' />
                     <p className='homebartext'>Swimming Pools</p>
                 </li>
-                <li className='sidebariconbox'>
+                {/* <li className='sidebariconbox'>
                     <BsCupHot className='homebaricon' />
                     <p className='homebartext'>Bed & Breakfast</p>
-                </li>
+                </li> */}
                 <li className='sidebariconbox'>
                     <PiBuildings className='homebaricon' />
                     <p className='homebartext'>Hair Spa</p>

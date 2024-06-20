@@ -5,6 +5,9 @@ import * as Yup from 'yup'
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Bounce } from "react-activity";
+import { FaArrowLeft } from "react-icons/fa6";
+import { FaArrowRight } from "react-icons/fa6";
+import SpotDashboard from './SpotDashboard/SpotDashboard';
 
 const initialState = {
   name: '',
@@ -44,6 +47,7 @@ function MySpot() {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [indicator, setIndicator] = useState(false);
   const [havespot, sethavespot] = useState(false);
+  const [isform , setform] = useState(true)
   const [Errors, setErrors] = useState({
     name: '',
     about: '',
@@ -54,7 +58,7 @@ function MySpot() {
   })
 
   useEffect(()=>{
-    const data = localStorage.getItem('msatoken')
+    const data = localStorage.getItem('msaToken')
     if(data){
       sethavespot(true)
     }
@@ -129,13 +133,9 @@ function MySpot() {
 
   if(havespot){
     return (
-      <div className='flex flex-col h-96 items-center justify-center'>
-        <img
-          src='https://img.freepik.com/premium-vector/boy-is-working-web-page_118167-1706.jpg?w=1380'
-          className='h-80 w-80'
-        />
-        <p>You've already created your Spot. Go to Profile to View</p>
-      </div>
+      <>
+      <SpotDashboard/>
+      </>
     )
   }
 
@@ -157,7 +157,7 @@ function MySpot() {
           />
         </div>
         <div className='w-full h-full md:w-1/2'>
-          <div className='p-10 flex flex-col gap-2'>
+          {isform ?<div className='p-10 flex flex-col gap-2'>
 
             <label className='text-base'>Name of your Spot</label><br></br>
             <input
@@ -191,6 +191,19 @@ function MySpot() {
             />
             {Errors.location && <span className='text-red-600 text-xs'>{Errors.location}</span>}
 
+            <button
+              className='flex items-center justify-center gap-2 bg-primary h-11 text-white rounded-md w-full md:w-3/4 my-4'
+              onClick={() => setform(false)}
+            >
+              Next <FaArrowRight/>
+            </button>
+            
+          </div>:
+          <div className='p-10 flex flex-col gap-2'>
+            
+            <div className='flex flex-col items-end  md:w-3/4'>
+              <button onClick={()=>setform(true)} className='flex items-center gap-2 float-right text-primary'><FaArrowLeft className='text-lg'/>Back</button>
+            </div>
 
             <label className='text-base'>Fee per hour</label><br></br>
             <input
@@ -239,6 +252,7 @@ function MySpot() {
               Create My Spot
             </button>}
           </div>
+            }
         </div>
       </div>
     </div>

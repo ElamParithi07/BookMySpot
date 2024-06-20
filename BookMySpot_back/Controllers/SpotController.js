@@ -113,7 +113,6 @@ async function updatespot(req, res) {
     try {
         const spotid = req.locals.spotid
 
-
         //updating the spot
         const updatedSpot = await MySpot.findByIdAndUpdate(spotid, req.body, { new: true })
         return res.status(200).json({ message: "Your Spot has been updated!", data: updatedSpot })
@@ -157,18 +156,20 @@ async function getAllSpot (req,res){
     }
 }
 
-async function getSpotbyId(req,res){
-    try{
-        const {spotid} = req.body;
-        const data = await MySpot.findOne(spotid)
-        if(!data){
-            return res.status(404).json({message:"No data found"})
+async function getSpotbyId(req, res) {
+    try {
+        const { spotid } = req.body
+        console.log(spotid)
+        console.log("Inside api");
+        const data = await MySpot.findById(spotid)
+        console.log(data)
+        if (!data) {
+            return res.status(404).json({ message: "No data found" });
         }
-        return res.status(200).json({data:data})
-    }
-    catch(error){
-        console.log(error)
-        return res.status(500).json({message:error.response})
+        return res.status(200).json({ data: data });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: error.message || "Internal Server Error" });
     }
 }
 

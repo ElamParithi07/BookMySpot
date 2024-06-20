@@ -22,9 +22,9 @@ function HomePageBody() {
 
     return (
         <div className='w-full flex flex-wrap justify-start py-6 md:gap-0  md:my-20 '>
-            {spotList.map((spot) => {
+            {spotList.map((spot, index) => {
                 return (
-                    <PlaceCard data={spot} />
+                    <PlaceCard data={spot}  key={index}/>
                 )
             })}
 {/* 

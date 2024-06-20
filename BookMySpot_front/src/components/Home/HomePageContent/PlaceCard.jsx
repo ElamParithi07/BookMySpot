@@ -1,9 +1,12 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { IoMdStar } from "react-icons/io";
 import { Link } from 'react-router-dom';
 import { PiPhoneCallFill } from "react-icons/pi";
+import { AiOutlineHeart } from "react-icons/ai";
+import { AiFillHeart } from "react-icons/ai";
 
 function PlaceCard({ data }) {
+  const [issaved, setSaved] = useState(false);
   const imageUrl = 'https://a0.muscache.com/im/pictures/miso/Hosting-5264493/original/10d2c21f-84c2-46c5-b20b-b51d1c2c971a.jpeg?im_w=1200'
 
   console.log(data)
@@ -20,9 +23,12 @@ function PlaceCard({ data }) {
 
       <div className='flex justify-between'>
         <p className='placecardtext'>{data.name}</p>
-        <div className='flex gap-1 items-center'>
-          <IoMdStar className='placecardtext' />
-          <p className='placecardtext'>{"4.5"}</p>
+        <div className='flex  items-center justify-center gap-4'>
+          <div className='flex gap-1 items-center'>
+            <IoMdStar className='placecardtext' />
+            <p className='placecardtext'>{"4.5"}</p>
+          </div>
+          <button onClick={()=>setSaved(!issaved)}>{issaved?<AiFillHeart className='text-primary text-xl' />:<AiOutlineHeart className='text-xl' />}</button>
         </div>
       </div>
       <div className='flex gap-3 items-center'>

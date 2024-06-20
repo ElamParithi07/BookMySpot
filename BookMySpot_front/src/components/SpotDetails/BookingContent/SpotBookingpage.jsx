@@ -7,6 +7,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useUserstate } from '../../../Context/UserContext';
 import axios from 'axios';
 import { Bounce } from "react-activity";
+import { createnewtoken } from '../../RefreshSession/RefreshUser';
 
 function SpotBookingpage() {
     const { id } = useParams();
@@ -15,8 +16,8 @@ function SpotBookingpage() {
     const [indicator, setIndicator] = useState(false)
     const { isloggedIn } = useUserstate();
     const email = localStorage.getItem('email')
-
     let authtoken = localStorage.getItem('authtoken')
+    
     useEffect(() => {
         async function fetchData() {
             try {
@@ -34,7 +35,7 @@ function SpotBookingpage() {
     async function handleBook() {
         try {
             setIndicator(true)
-            console.log(authtoken)
+            authtoken = localStorage.getItem('authtoken')
             const response = await axios.post('http://localhost:8083/book/bookspot', { bookedto: id, hours: 2 }, {
                 headers: {
                     'Authorization': `Bearer ${authtoken}`,
@@ -47,29 +48,23 @@ function SpotBookingpage() {
             navigate('/')
         }
         catch (error) {
-            // Handle Axios request errors
+            console.log(error.message)
             if (error.response) {
-                // The request was made and the server responded with a status code
                 console.log(error.response.data); // response data
-                console.log(error.response.status); // response status code
-                // console.log(error.response.headers); // response headers
-                // Handle different status codes accordingly
+                console.log(error.response.status); 
                 if (error.response.status === 401) {
                     console.log('Token expired')
-                    await createnewtoken()
+                    await createnewtoken(email)
                     await handleBook();
                 } else if (error.response.status === 400) {
                     alert('Invalid Auth Token');
                 } else {
-                    // Handle other status codes or errors
                     console.log('Unexpected Error:', error.response.data);
                 }
             } else if (error.request) {
-                // The request was made but no response was received
                 console.log(error.request);
                 alert('No response from the server');
             } else {
-                // Something else happened in setting up the request
                 console.log('Error:', error.message);
                 alert('Error:', error.message);
             }
@@ -77,25 +72,6 @@ function SpotBookingpage() {
         }
     }
 
-    async function createnewtoken(){
-        try{
-            const token = localStorage.getItem('refreshToken')
-            if(!token){
-                alert('Refresh Token Not found Login again')
-                return ;
-            }
-            const response = await axios.post('http://localhost:8083/auth/refreshuser',{email, token})
-            const responseData = response.data
-            alert(responseData.authtoken)
-            authtoken = responseData.authtoken
-            console.log(authtoken)
-            console.log("new token created!")
-        }
-        catch(error){
-            alert(error)
-            console.log(error)
-        }
-    }
 
     return (
         <div className='mx-5 h-full md:mx-48 md:mt-11 flex flex-col md:flex-row gap-7'>

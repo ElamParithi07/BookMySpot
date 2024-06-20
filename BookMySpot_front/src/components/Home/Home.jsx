@@ -7,7 +7,7 @@ function Home() {
     
 
     return (
-        <div className='mx-7 my-16 md:my-0 md:mx-40 flex flex-col'>
+        <div className='mx-7 my-28 md:my-0 md:mx-40 flex flex-col'>
             <HomePageBody />
         </div>
     )

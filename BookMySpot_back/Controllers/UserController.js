@@ -120,7 +120,7 @@ async function verifyotp(req, res) {
             const user = await User.findOne({ email: email })
 
             // Create auth token
-            const authtoken = jwt.sign({ email: email }, key, {expiresIn: '2m'})
+            const authtoken = jwt.sign({ email: email }, key, {expiresIn: '1d'})
             const refreshToken = jwt.sign({email: email}, key)
             return res.status(200).json({ status: true, message: "Login successful!", authtoken: authtoken, msatoken: user.myspot, refreshToken: refreshToken });
         } else {
@@ -188,6 +188,62 @@ async function getUser(req, res) {
     }
 }
 
+async function saveSpot(req, res) {
+    try {
+        const { userid, email } = req.locals;
+        const { spotid } = req.body;
+
+        // Ensure the spotid is a valid ObjectId
+        if (!mongoose.Types.ObjectId.isValid(spotid)) {
+            return res.status(400).json({ message: 'Invalid spot ID' });
+        }
+
+        // Find the user by email and update the saved array without duplicates
+        const user = await User.findOneAndUpdate(
+            { email },
+            { $addToSet: { saved: spotid } },
+            { new: true }
+        );
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        return res.status(200).json({ message: 'Spot added to your wishlist', user});
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: error.message });
+    }
+}
+
+async function removeSpot(req, res) {
+    try {
+        const { email } = req.locals;
+        const { spotid } = req.body;
+
+        // Ensure the spotid is a valid ObjectId
+        if (!mongoose.Types.ObjectId.isValid(spotid)) {
+            return res.status(400).json({ message: 'Invalid spot ID' });
+        }
+
+        // Find the user by email and remove the spotid from the saved array
+        const user = await User.findOneAndUpdate(
+            { email },
+            { $pull: { saved: spotid } },
+            { new: true }
+        );
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        return res.status(200).json({ message: 'Spot removed from your wishlist', user });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: error.message });
+    }
+}
+
 async function generateotp() {
     const otp = await OtpGenerator.generate(6, { digits: true, lowerCaseAlphabets: false, upperCaseAlphabets: false, specialChars: false })
     return otp
@@ -229,4 +285,4 @@ async function sendMail(email, otp) {
 
 
 
-module.exports = { register, sendotp, verifyotp, checkvalidemail, getUser, checkandcreatetoken }
+module.exports = { register, sendotp, verifyotp, checkvalidemail, getUser, checkandcreatetoken, saveSpot, removeSpot }
