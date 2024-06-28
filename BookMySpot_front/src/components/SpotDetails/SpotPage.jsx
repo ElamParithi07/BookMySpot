@@ -3,65 +3,110 @@ import { Link, useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import SpotImageGrid from './SpotImageGrid';
 import { CiExport } from "react-icons/ci";
-import { CiHeart } from "react-icons/ci";
-import { IoMdStar } from 'react-icons/io';
-import { PiDoorOpen } from "react-icons/pi";
-import { SlLocationPin } from "react-icons/sl";
-import { GrKey } from "react-icons/gr";
-import { FaChevronDown } from "react-icons/fa6";
 import SpotDetails from './SpotDetailsPageContent/SpotDetails';
 import { MdKeyboardArrowLeft } from 'react-icons/md';
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
 import { createnewtoken } from '../RefreshSession/RefreshUser';
+import { Bounce, Sentry } from 'react-activity';
 
 function SpotPage() {
     const [issaved, setSaved] = useState(false)
     const navigate = useNavigate()
     const { id } = useParams();
     const [data, setData] = useState({});
-    console.log(id)
 
     useEffect(() => {
         const handleFetchData = async () => {
             try {
-                const response = await axios.get(`http://localhost:8083/spot/getspotbyid`, { spotid: id });
-                const responseData = response.data
+                console.log("Inside effect", id)
+                const response = await axios.get(`http://localhost:8083/spot/getspotbyid`, { params: { spotid: id } });
+                const responseData = response.data;
+                console.log(responseData);
                 setData(responseData.data)
             } catch (error) {
-                console.error(error);
+                console.log(error);
             }
+        }
+        const fetchData = async () =>{
+          try{
+            
+          }
+          catch(error){
+            console.log(error)
+          }
         }
         handleFetchData()
-    }, []);
+    }, [id]);
 
-    async function handlewishlist(){
-        try{
-            const response = await axios.post('http://localhost:8083/auth/addtolist',{ spotid: id})
-            const responseData = response.data
-            
-        }
-        catch(error){
-            console.log(error.message)
-            if (error.response) {
-                console.log(error.response.data); // response data
-                console.log(error.response.status); 
-                if (error.response.status === 401) {
-                    console.log('Token expired')
-                    await createnewtoken(email)
-                    await handlewishlist();
-                } else if (error.response.status === 400) {
-                    alert('Invalid Auth Token');
-                } else {
-                    console.log('Unexpected Error:', error.response.data);
+    async function handleSave() {
+        try {
+          const authtoken = localStorage.getItem('authtoken');
+          if (!authtoken) {
+            alert("Log in to save the spot");
+            return;
+          }
+          if(issaved){
+            const res = await axios.post("http://localhost:8083/auth/removefromlist",
+              {
+                spotid: data._id
+              },
+              {
+                headers: {
+                  'Authorization': `${authtoken}`,
+                  'Content-Type': 'application/json'
                 }
-            } else if (error.request) {
-                console.log(error.request);
-                alert('No response from the server');
-            } else {
-                console.log('Error:', error.message);
-                alert('Error:', error.message);
+              }
+            );
+            const resData = res.data
+            setSaved(false);
+            alert("Spot removed from wish list")
+            return;
+          }
+          const response = await axios.post("http://localhost:8083/auth/addtolist",
+            {
+              spotid: data._id
+            },
+            {
+              headers: {
+                'Authorization': `${authtoken}`,
+                'Content-Type': 'application/json'
+              }
             }
+          );
+          const responseData = response.data
+          setSaved(true);
+          alert("Spot added to wish list")
+        } catch (error) {
+          console.log(error.message)
+          if (error.response) {
+            console.log(error.response.data); // response data
+            console.log(error.response.status);
+            if (error.response.status === 401) {
+              console.log('Token expired')
+              const email = localStorage.getItem('email')
+              await createnewtoken(email)
+              await handleSave();
+            } else if (error.response.status === 400) {
+              alert('Invalid Auth Token');
+            } else {
+              console.log('Unexpected Error:', error.response.data);
+            }
+          } else if (error.request) {
+            console.log(error.request);
+            alert('No response from the server');
+          } else {
+            console.log('Error:', error.message);
+            alert('Error:', error.message);
+          }
         }
+      }
+
+    if (Object.keys(data).length === 0) {
+        return (
+            <div className='h-screen w-full flex justify-center items-center'>
+                <Sentry className='text-primary' size={25} speed={1} animating={true} />
+            </div>
+        )
     }
 
     return (
@@ -76,11 +121,11 @@ function SpotPage() {
                         <CiExport className='text-lg md:text-2xl' />
                         <p className='text-sm md:text-base'>Share</p>
                     </div>
-                    {issaved ? <button className='flex items-center justify-center gap-1' onClick={()=>handlewishlist()}>
+                    {issaved ? <button className='flex items-center justify-center gap-1' onClick={() => handleSave()}>
                         <AiFillHeart className='text-primary text-lg md:text-2xl' />
                         <p className='text-sm md:text-base'>Saved!</p>
                     </button> :
-                        <button className='flex items-center justify-center gap-1' onClick={()=>handlewishlist()}>
+                        <button className='flex items-center justify-center gap-1' onClick={() => handleSave()}>
                             <AiOutlineHeart className='text-lg md:text-2xl' />
                             <p className='text-sm md:text-base'>Save</p>
                         </button>

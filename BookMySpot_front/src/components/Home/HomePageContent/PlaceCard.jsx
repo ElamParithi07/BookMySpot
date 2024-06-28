@@ -4,12 +4,78 @@ import { Link } from 'react-router-dom';
 import { PiPhoneCallFill } from "react-icons/pi";
 import { AiOutlineHeart } from "react-icons/ai";
 import { AiFillHeart } from "react-icons/ai";
+import axios from 'axios';
+import { createnewtoken } from '../../RefreshSession/RefreshUser';
 
 function PlaceCard({ data }) {
   const [issaved, setSaved] = useState(false);
   const imageUrl = 'https://a0.muscache.com/im/pictures/miso/Hosting-5264493/original/10d2c21f-84c2-46c5-b20b-b51d1c2c971a.jpeg?im_w=1200'
 
-  console.log(data)
+
+  async function handleSave() {
+    try {
+      const authtoken = localStorage.getItem('authtoken');
+      if (!authtoken) {
+        alert("Log in to save the spot");
+        return;
+      }
+      if(issaved){
+        const res = await axios.post("http://localhost:8083/auth/removefromlist",
+          {
+            spotid: data._id
+          },
+          {
+            headers: {
+              'Authorization': `${authtoken}`,
+              'Content-Type': 'application/json'
+            }
+          }
+        );
+        const resData = res.data
+        setSaved(false);
+        alert("Spot removed from wish list")
+        return;
+      }
+      const response = await axios.post("http://localhost:8083/auth/addtolist",
+        {
+          spotid: data._id
+        },
+        {
+          headers: {
+            'Authorization': `${authtoken}`,
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+      const responseData = response.data
+      setSaved(true);
+      alert("Spot added to wish list")
+    } catch (error) {
+      console.log(error.message)
+      if (error.response) {
+        console.log(error.response.data); // response data
+        console.log(error.response.status);
+        if (error.response.status === 401) {
+          console.log('Token expired')
+          const email = localStorage.getItem('email')
+          await createnewtoken(email)
+          await handleSave();
+        } else if (error.response.status === 400) {
+          alert('Invalid Auth Token');
+        } else {
+          console.log('Unexpected Error:', error.response.data);
+        }
+      } else if (error.request) {
+        console.log(error.request);
+        alert('No response from the server');
+      } else {
+        console.log('Error:', error.message);
+        alert('Error:', error.message);
+      }
+    }
+  }
+
+
   return (
 
     <div className='flex flex-col h-2/12 w-full md:h-3/4 md:w-2/6 p-4'>
@@ -28,7 +94,7 @@ function PlaceCard({ data }) {
             <IoMdStar className='placecardtext' />
             <p className='placecardtext'>{"4.5"}</p>
           </div>
-          <button onClick={()=>setSaved(!issaved)}>{issaved?<AiFillHeart className='text-primary text-xl' />:<AiOutlineHeart className='text-xl' />}</button>
+          <button onClick={() => handleSave()}>{issaved ? <AiFillHeart className='text-primary text-xl' /> : <AiOutlineHeart className='text-xl' />}</button>
         </div>
       </div>
       <div className='flex gap-3 items-center'>

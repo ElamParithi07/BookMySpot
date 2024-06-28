@@ -6,6 +6,7 @@ const OtpGenerator = require('otp-generator')
 const nodemailer = require('nodemailer')
 const { client } = require('../Redis')
 const axios = require('axios')
+const { default: mongoose } = require('mongoose')
 
 require('dotenv').config()
 
@@ -137,7 +138,7 @@ async function checkandcreatetoken(req,res){
     try{
         const decoded = jwt.verify(token , key)
         if( email === decoded.email){
-            const newtoken = jwt.sign({email: decoded.email}, key, {expiresIn:'2m'})
+            const newtoken = jwt.sign({email: decoded.email}, key, {expiresIn:'1d'})
             return res.status(200).json({authtoken : newtoken})
         }
         else{

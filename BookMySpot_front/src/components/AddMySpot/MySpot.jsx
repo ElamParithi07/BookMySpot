@@ -46,7 +46,7 @@ function MySpot() {
   const [tempslot, setTempslot] = useState([])
   const [state, dispatch] = useReducer(reducer, initialState);
   const [indicator, setIndicator] = useState(false);
-  const [havespot, sethavespot] = useState(false);
+  const [havespot, sethavespot] = useState(0);
   const [isform , setform] = useState(true)
   const [Errors, setErrors] = useState({
     name: '',
@@ -58,9 +58,13 @@ function MySpot() {
   })
 
   useEffect(()=>{
-    const data = localStorage.getItem('msaToken')
-    if(data){
-      sethavespot(true)
+    const data = localStorage.getItem('msatoken')
+    const user = localStorage.getItem('authtoken')
+    if(!user){
+      sethavespot(2)
+    }
+    else if(data){
+      sethavespot(1)
     }
   },[])
 
@@ -131,10 +135,18 @@ function MySpot() {
     }
   }
 
-  if(havespot){
+  if(havespot===1){
     return (
       <>
       <SpotDashboard/>
+      </>
+    )
+  }
+
+  if(havespot===2){
+    return (
+      <>
+        Login to create your spot
       </>
     )
   }

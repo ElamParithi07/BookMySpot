@@ -12,7 +12,7 @@ import { VscSparkle } from 'react-icons/vsc';
 import ReserveSpotCard from './ReserveSpotCard';
 import UserReview from './UserReview';
 
-function SpotDetails({data}) {
+function SpotDetails({ data }) {
     const imageUrl =
         'https://a0.muscache.com/im/pictures/miso/Hosting-5264493/original/10d2c21f-84c2-46c5-b20b-b51d1c2c971a.jpeg?im_w=1200';
 
@@ -56,7 +56,7 @@ function SpotDetails({data}) {
                         <img className='h-8 w-8 rounded-full' src={imageUrl} />
                         <div>
                             <p className='text-sm md:text-base'>Hosted by {data.name}</p>
-                            <p className='text-xs md:text-sm text-slate-400'>{data.spotstatus?"Spot is Opened":"Spot is Closed"}</p>
+                            <p className='text-xs md:text-sm text-slate-400'>{data.spotstatus ? "Spot is Opened" : "Spot is Closed"}</p>
                         </div>
                     </div>
                     <div className='h-px w-full md:w-5/6 bg-slate-300 my-7 rounded'></div>
@@ -97,119 +97,19 @@ function SpotDetails({data}) {
                         <p className='text-slate-800 text-sm md:text-base w-4/5'>
                             {data.name} is a beautiful Turf located on our Coffee plantation
                             and a just few minutes from the famous Nagarahole Tiger Reserve, Kabini, Brahmagiri
-                            hills, Irpu falls & other attractions. We offer 6 exquisitely designed large & clean
-                            rooms, each with a private balcony and private bathroom. Individual room's or the
-                            Entire villa can be reserved by guests. For eg...
                             <button className='underline p-2 bg-slate-100 rounded-lg'>Show more</button>
                         </p>
                     </div>
                 </div>
                 {/* Reserve spot card */}
-                <ReserveSpotCard data={data}/>
+                <ReserveSpotCard data={data} />
             </div>
             <div className='h-px w-full bg-slate-300 my-7 rounded'></div>
             {/* Review rating section */}
-            <div className='w-full text-center mb-10'>
+            <div className='w-full text-center mb-10 flex flex-col items-center'>
                 <p className='font-semibold text-2xl'>Guest Reviews</p>
+                <div className='h-px w-1/5 bg-slate-300 my-7 rounded'></div>
             </div>
-            <div className='w-full py-6'>
-                <ul className='flex flex-wrap justify-evenly'>
-                    <li className='flex flex-col h-36 w-3/4 md:w-36 gap-1 justify-center'>
-                        <p>Overall rating</p>
-                        <ul className='flex flex-col'>
-                            <li className='flex text-sm items-center gap-1'>
-                                <p>5</p>
-                                <div className="w-4/5 bg-gray-200 h-1 rounded-md overflow-hidden">
-                                    <div
-                                        className="bg-black h-1 transition-all duration-300"
-                                        style={{ width: `50%` }}
-                                    ></div>
-                                </div>
-                            </li>
-                            <li className='flex text-sm items-center gap-1'>
-                                <p>4</p>
-                                <div className="w-4/5 bg-gray-200 h-1 rounded-md overflow-hidden">
-                                    <div
-                                        className="bg-black h-1 transition-all duration-300"
-                                        style={{ width: `10%` }}
-                                    ></div>
-                                </div>
-                            </li>
-                            <li className='flex text-sm items-center gap-1'>
-                                <p>3</p>
-                                <div className="w-4/5 bg-gray-200 h-1 rounded-md overflow-hidden">
-                                    <div
-                                        className="bg-black h-1 transition-all duration-300"
-                                        style={{ width: `14%` }}
-                                    ></div>
-                                </div>
-                            </li>
-                            <li className='flex text-sm items-center gap-1'>
-                                <p>2</p>
-                                <div className="w-4/5 bg-gray-200 h-1 rounded-md overflow-hidden">
-                                    <div
-                                        className="bg-black h-1 transition-all duration-300"
-                                        style={{ width: `60%` }}
-                                    ></div>
-                                </div>
-                            </li>
-                            <li className='flex text-sm items-center gap-1'>
-                                <p>1</p>
-                                <div className="w-4/5 bg-gray-200 h-1 rounded-md overflow-hidden">
-                                    <div
-                                        className="bg-black h-1 transition-all duration-300"
-                                        style={{ width: `0%` }}
-                                    ></div>
-                                </div>
-                            </li>
-                        </ul>
-
-                    </li>
-                    <li className='reviewbox'>
-                        <div>
-                            <p>Cleanliness</p>
-                            <p className='text-lg font-medium'>5.0</p>
-                        </div>
-                        <VscSparkle className='text-5xl' />
-                    </li>
-                    <li className='reviewbox'>
-                        <div>
-                            <p>Accuracy</p>
-                            <p className='text-lg font-medium'>4.8</p>
-                        </div>
-                        <PiCheckCircle className='text-5xl' />
-                    </li>
-                    <li className='reviewbox'>
-                        <div>
-                            <p>Check-in</p>
-                            <p className='text-lg font-medium'>4.9</p>
-                        </div>
-                        <GrKey className='text-4xl' />
-                    </li>
-                    <li className='reviewbox'>
-                        <div>
-                            <p>Communication</p>
-                            <p className='text-lg font-medium'>4.8</p>
-                        </div>
-                        <BsChatSquare className='text-4xl' />
-                    </li>
-                    <li className='reviewbox'>
-                        <div>
-                            <p>Location</p>
-                            <p className='text-lg font-medium'>4.5</p>
-                        </div>
-                        <BsMap className='text-4xl' />
-                    </li>
-                    <li className='reviewbox'>
-                        <div>
-                            <p>Value</p>
-                            <p className='text-lg font-medium'>4.6</p>
-                        </div>
-                        <BsTag className='text-4xl' />
-                    </li>
-                </ul>
-            </div>
-            <div className='h-px w-full bg-slate-300 my-7 rounded'></div>
             {/* Reviews text*/}
             <div className='w-full'>
                 <UserReview imageUrl={imageUrl} rating={2} />

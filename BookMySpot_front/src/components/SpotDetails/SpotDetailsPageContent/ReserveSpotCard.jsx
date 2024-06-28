@@ -1,43 +1,28 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { FaChevronDown } from 'react-icons/fa6'
 import { Link } from 'react-router-dom'
+import SlotSelectionCard from './SlotSelectionCard'
 
-function ReserveSpotCard({data}) {
+function ReserveSpotCard({ data }) {
+
+    const [isShowslots, setShowslots] = useState(false)
+
+    function toggleshowslots() {
+        setShowslots(!isShowslots)
+    }
     return (
         <div className='hidden w-0 h-4/6 md:flex md:w-4/6 justify-center'>
+            {
+                isShowslots && <SlotSelectionCard toggleshowslots={toggleshowslots} data={data}/>
+            }
             <div className='w-96 bg-white flex flex-col shadow-md rounded-xl border border-slate-200 p-5 justify-between gap-3'>
                 <div className='flex items-end gap-1'>
                     <p className='font-medium text-xl'>₹{data.feeperhour}</p>
                     <p>/ hr</p>
                 </div>
                 <div className='border rounded-xl'>
-                    <div className='flex'>
-                        <div className='w-1/2 p-4 border-r-2'>
-                            <p className='font-semibold text-sm overflow-hidden'>Date</p>
-                            <input type='date' className='text-sm overflow-hidden'/>
-                        </div>
-                        <div className='w-1/2 p-4'>
-                            <p className='font-semibold text-sm overflow-hidden'>No. of Hours</p>
-                            <p className='text-base overflow-hidden'>1</p>
-                        </div>
-                    </div>
-                    <div className='flex justify-between items-center p-4 border-t-2'>
-                        <div className='w-full'>
-                            <p className='font-semibold text-sm overflow-hidden'>My Slots</p>
-                            <select className='text-base overflow-hidden w-full p-3 bg-white scroll-y-auto'>
-                                <option value={"1"}>10 AM - 11 AM</option>
-                                <option value={"2"}>11 AM - 12 AM</option>
-                                <option value={"3"}>12 AM - 1 PM</option>
-                                <option value={"4"}>12 AM - 1 PM</option>
-                                <option value={"5"}>1 PM - 2 PM</option>
-                                <option value={"6"}>2 PM - 3 PM</option>
-                                <option value={"7"}>3 PM - 4 PM</option>
-                                <option value={"8"}>4 PM - 5 PM</option>
-                                <option value={"9"}>5 PM - 6 PM</option>
-                                <option value={"10"}>6 PM - 7 PM</option>
-                                <option value={"11"}>7 PM - 8 PM</option>
-                            </select>
-                        </div>
+                    <div className='flex justify-center items-center p-4'>
+                        <button onClick={()=> toggleshowslots()}>Choose your Slot</button>
                     </div>
                 </div>
                 <div className='bg-primary w-full h-12 rounded-xl flex items-center justify-center cursor-pointer'>

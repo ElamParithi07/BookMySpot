@@ -19,7 +19,7 @@ function Profile() {
         return;
       }
       localStorage.removeItem('authtoken')
-      localStorage.removeItem('msaToken')
+      localStorage.removeItem('msatoken')
       localStorage.removeItem('email')
       localStorage.removeItem('refreshToken')
       refreshOtherPages();
