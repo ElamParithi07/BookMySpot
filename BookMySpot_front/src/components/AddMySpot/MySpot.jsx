@@ -54,7 +54,7 @@ function MySpot() {
     location: '',
     feeperhour: '',
     phonenumber: '',
-    slots: ''
+    // slots: ''
   })
 
   useEffect(()=>{
@@ -75,13 +75,13 @@ function MySpot() {
     feeperhour: Yup.string().required("this field is required"),
     phonenumber: Yup.string().required("phone number is required"),
     gmaplink: Yup.string(),
-    slots: Yup.array().required("select your slots").min(1, "Select your Slots, it should not empty")
+    // slots: Yup.array().required("select your slots").min(1, "Select your Slots, it should not empty")
   })
 
   async function handleAddspot(e) {
     e.preventDefault();
-    console.log(tempslot)
-    dispatch({ type: 'SET_SLOTS', payload: [tempslot] })
+    // console.log(tempslot)
+    // dispatch({ type: 'SET_SLOTS', payload: [tempslot] })
     try {
       await validationSchema.validate(state, { abortEarly: false })
       setErrors({});
@@ -91,7 +91,7 @@ function MySpot() {
       console.log(authtoken)
       setIndicator(true)
       const response = await axios.post('http://localhost:8083/spot/addspot', 
-        {name:state.name, about:state.about, location:state.location, phonenumber: state.phonenumber, feeperhour: state.feeperhour, gmaplink: state.gmaplink, slots: tempslot}
+        {name:state.name, about:state.about, location:state.location, phonenumber: state.phonenumber, feeperhour: state.feeperhour, gmaplink: state.gmaplink}
       , {
         headers: {
           'content-type':'application/json',
@@ -103,7 +103,7 @@ function MySpot() {
       setIndicator(false)
       const spottoken = localStorage.setItem('msatoken', responseData.msatoken)
       alert(responseData.message)
-      navigate('/profile')
+      navigate('/profile');
     }
     catch (error) {
       setIndicator(false)
@@ -249,9 +249,9 @@ function MySpot() {
             />
 
 
-            <label className='text-base'>Select Slots</label><br></br>
+            {/* <label className='text-base'>Select Slots</label><br></br>
             <button className='border border-green-500 text-green-500 w-full md:w-3/4 rounded-md p-2' onClick={() => toggleshowslots()}>View Slots</button>
-            {Errors.slots && <span className='text-red-600 text-xs'>{Errors.slots}</span>}
+            {Errors.slots && <span className='text-red-600 text-xs'>{Errors.slots}</span>} */}
 
             {indicator?<button
               className=' bg-primary h-11 text-white rounded-md w-full md:w-3/4'

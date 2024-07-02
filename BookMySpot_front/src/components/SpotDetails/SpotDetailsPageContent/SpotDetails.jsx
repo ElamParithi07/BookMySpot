@@ -1,23 +1,25 @@
-import React from 'react';
-import { FaChevronDown } from 'react-icons/fa6';
+import React, { useState } from 'react';
 import { GrKey } from 'react-icons/gr';
 import { IoMdStar } from 'react-icons/io';
 import { PiDoorOpen } from 'react-icons/pi';
 import { SlLocationPin } from 'react-icons/sl';
-import { PiCheckCircle } from 'react-icons/pi';
-import { BsChatSquare } from 'react-icons/bs';
-import { BsMap } from 'react-icons/bs';
-import { BsTag } from 'react-icons/bs';
-import { VscSparkle } from 'react-icons/vsc';
 import ReserveSpotCard from './ReserveSpotCard';
 import UserReview from './UserReview';
+import { CiEdit } from "react-icons/ci";
+import ReviewCard from '../ReviewCard';
 
 function SpotDetails({ data }) {
-    const imageUrl =
-        'https://a0.muscache.com/im/pictures/miso/Hosting-5264493/original/10d2c21f-84c2-46c5-b20b-b51d1c2c971a.jpeg?im_w=1200';
+    const [ showReview, setShowReview] = useState(false);
+    const imageUrl ='https://a0.muscache.com/im/pictures/miso/Hosting-5264493/original/10d2c21f-84c2-46c5-b20b-b51d1c2c971a.jpeg?im_w=1200';
 
+    function toggleshowreview(){
+        setShowReview(!showReview)
+    }
     return (
         <div className='w-full mt-3'>
+            {
+                showReview && <ReviewCard toggleshowreview={toggleshowreview} spotid={data._id}/>
+            }
             {/* Spot details body section */}
             <div className='flex flex-col md:flex-row'>
                 {/* spot details left portion */}
@@ -108,11 +110,20 @@ function SpotDetails({ data }) {
             {/* Review rating section */}
             <div className='w-full text-center mb-10 flex flex-col items-center'>
                 <p className='font-semibold text-2xl'>Guest Reviews</p>
-                <div className='h-px w-1/5 bg-slate-300 my-7 rounded'></div>
+                <div className='h-px w-1/5 bg-slate-300 md:my-7 rounded'></div>
+                <button onClick={()=>toggleshowreview()}>
+                    <p className='flex items-center gap-3 bg-slate-100 p-1 md:p-2 my-3 text-xs md:text-base md:my-0 rounded-lg cursor-pointer'><CiEdit/>Write a review</p>
+                </button>
             </div>
             {/* Reviews text*/}
-            <div className='w-full'>
-                <UserReview imageUrl={imageUrl} rating={2} />
+            <div className='w-full pb-10 md:pb-0 md:flex justify-evenly'>
+                {data.reviews && data.reviews.map((item, index)=>{
+                    return (
+                        <>
+                            <UserReview imageUrl={imageUrl} data={item} key={index}/>
+                        </>
+                    )
+                })}
             </div>
         </div>
     );

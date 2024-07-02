@@ -3,7 +3,7 @@ const User = require('../Models/User')
 const Review = require('./Review')
 const Slot = require('./Slot')
 
-const MySpot =new mongoose.model('myspots',mongoose.Schema({
+const MySpot =new mongoose.model('MySpot',mongoose.Schema({
     ownedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     name: { type: String, required: true },
     about: { type: String, required: true },

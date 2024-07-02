@@ -7,11 +7,12 @@ const nodemailer = require('nodemailer')
 const { client } = require('../Redis')
 const axios = require('axios')
 const { default: mongoose } = require('mongoose')
+let MySpot = require('../Models/MySpot')
 
 require('dotenv').config()
 
 const key = process.env.SECRET_KEY
-const refreshkey = process.env.REFRESH_TOKEN_KEY
+const refreshkey = process.env.REFRESH_TOKEN_KEY;
 
 const signupSchema = joi.object({
     email: joi.string().email().required(),
@@ -110,22 +111,29 @@ async function sendotp(req, res) {
 async function verifyotp(req, res) {
     const { email, otp } = req.body;
     try {
-        // Get otp from Redis
+        // Get OTP from Redis
         const value = await client.get(`${email}`);
         if (!value) {
             return res.json({ status: false, message: "OTP expired!" });
         }
 
-        //check if otp is valid
+        // Check if OTP is valid
         if (value === otp) {
-            const user = await User.findOne({ email: email })
+            const user = await User.findOne({ email: email });
+
+            
 
             // Create auth token
-            const authtoken = jwt.sign({ email: email }, key, {expiresIn: '1d'})
-            const refreshToken = jwt.sign({email: email}, key)
+            const authtoken = jwt.sign({ email: email }, key, { expiresIn: '1d' });
+            const refreshToken = jwt.sign({ email: email }, key);
+
+            // Store only the saved list in Redis
+            console.log(user.saved)
+            await client.set(`${email}`, JSON.stringify(user.saved));
+
             return res.status(200).json({ status: true, message: "Login successful!", authtoken: authtoken, msatoken: user.myspot, refreshToken: refreshToken });
         } else {
-            return res.json({ status: false, message: "Invalid OTP" })
+            return res.json({ status: false, message: "Invalid OTP" });
         }
     } catch (error) {
         console.log(error);
@@ -161,12 +169,11 @@ async function checkvalidemail(req, res) {
 
         // Accessing response data
         const responseData = response.data;
-
         if (responseData.is_valid_format.value === false) {
             return res.json({ status: false, message: "Invalid email format" });
         }
         if (responseData.deliverability === "UNDELIVERABLE") {
-            return res.json({ status: false, message: "No such email Exists!" });
+            return res.json({ status: false, message: "No such email Exists!" })
         }
         return res.json({ status: true });
     } catch (error) {
@@ -178,14 +185,48 @@ async function checkvalidemail(req, res) {
 async function getUser(req, res) {
     try {
         const email = req.locals.email;
-        const user = await User.findOne({ email });
+        const user = await client.get(`${email}`);
+        
         if (user) {
-            return res.status(200).json({ data: user })
+            let parsedUser;
+            try {
+                parsedUser = JSON.parse(user);
+            } catch (jsonError) {
+                console.error("Error parsing JSON from Redis:", jsonError);
+                return res.status(500).json({ message: "Invalid user data format" });
+            }
+
+            return res.status(200).json({ data: parsedUser });
         }
-        return res.status(404).json({ message: "User Not Found" })
+
+        return res.status(404).json({ message: "User Not Found" });
+    } catch (error) {
+        console.error("Error in getUser:", error);
+        return res.status(500).json({ message: error.message });
     }
-    catch (error) {
-        return res.json({ message: error })
+}
+
+async function getProfile(req,res){
+    try{
+        const email = req.locals.email;
+        const user = await User.findOne({email: email}).populate('myspot').populate('saved')
+        console.log(user)
+        if(user){
+            const userData = {
+                email : user.email,
+                saved: user.saved,
+                history: user.history,
+                myspot : user.myspot
+            }
+            return res.status(200).json(userData)
+        }
+        else{
+            return res.status(404).json({message:"User not found"});
+        }
+    }
+    catch(error){
+        console.log(error)
+        return res.status(500).json({message:"Internal Server error"})
     }
 }
 
@@ -210,7 +251,11 @@ async function saveSpot(req, res) {
             return res.status(404).json({ message: 'User not found' });
         }
 
-        return res.status(200).json({ message: 'Spot added to your wishlist', user});
+        // Store only the saved list in Redis
+        
+        await client.set(`${email}`, JSON.stringify(user.saved));
+
+        return res.status(200).json({ message: 'Spot added to your wishlist' });
     } catch (error) {
         console.log(error);
         return res.status(500).json({ message: error.message });
@@ -219,7 +264,7 @@ async function saveSpot(req, res) {
 
 async function removeSpot(req, res) {
     try {
-        const { email } = req.locals;
+        const { email } = req.locals
         const { spotid } = req.body;
 
         // Ensure the spotid is a valid ObjectId
@@ -238,9 +283,29 @@ async function removeSpot(req, res) {
             return res.status(404).json({ message: 'User not found' });
         }
 
-        return res.status(200).json({ message: 'Spot removed from your wishlist', user });
+        await client.set(`${email}`, JSON.stringify(user.saved));
+
+        return res.status(200).json({ message: 'Spot removed from your wishlist'});
     } catch (error) {
         console.log(error);
+        return res.status(500).json({ message: error.message });
+    }
+}
+
+async function removedata(req, res) {
+    try {
+        const { email } = req.locals;
+
+        // Remove the data stored in Redis with the given email as the key
+        const result = await client.del(`${email}`);
+        
+        if (result === 1) {
+            return res.status(200).json({ message: 'Data successfully removed from Redis' });
+        } else {
+            return res.status(404).json({ message: 'Data not found in Redis' });
+        }
+    } catch (error) {
+        console.error("Error in removedata:", error);
         return res.status(500).json({ message: error.message });
     }
 }
@@ -285,5 +350,4 @@ async function sendMail(email, otp) {
 }
 
 
-
-module.exports = { register, sendotp, verifyotp, checkvalidemail, getUser, checkandcreatetoken, saveSpot, removeSpot }
+module.exports = { register, sendotp, verifyotp, checkvalidemail, getUser, checkandcreatetoken, saveSpot, removeSpot, removedata, getProfile }

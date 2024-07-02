@@ -6,6 +6,7 @@ const client = require('./Redis')
 const UserRouter = require('./Routes/UserRouter')
 const AddSpotRouter = require('./Routes/AddSpotRouter')
 const BookingRouter = require('./Routes/BookingRouter')
+const ReviewRouter = require('./Routes/ReviewRouter')
 
 require('dotenv').config()
 const app = express();
@@ -20,6 +21,7 @@ app.use(express.json())
 app.use('/auth',UserRouter)
 app.use('/spot',AddSpotRouter)
 app.use('/book',BookingRouter)
+app.use('/review',ReviewRouter)
 
 mongoose.connect(process.env.MONGO_URL)
     .then(() => {

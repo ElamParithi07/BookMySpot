@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const Review = mongoose.model('reviews', new mongoose.Schema({
+const Review = mongoose.model('Review', new mongoose.Schema({
     reviewer:{type:mongoose.Schema.Types.ObjectId, ref:'User'},
     reviewedSpot:{type:mongoose.Schema.Types.ObjectId, ref:'MySpot'},
     content:{type:String, required:true},

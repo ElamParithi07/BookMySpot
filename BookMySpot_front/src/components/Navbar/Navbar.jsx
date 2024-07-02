@@ -85,7 +85,7 @@ function Navbar() {
                     <div className='hidden w-0 md:flex basis-1/4 justify-between items-center gap-3'>
                         <div className='md:flex items-center justify-center gap-0.5'>
                             <CiGlobe className='text-xl' />
-                            <Link to={'/addmyspot'} className='text-base'>Add Mine</Link>
+                            <Link to={'/addmyspot'} className='text-base'>My Spot</Link>
                         </div>
                         <div>
                             <button className='flex w-2/8 p-2 border rounded-3xl gap-1' onClick={() => { handlesidebar() }} >

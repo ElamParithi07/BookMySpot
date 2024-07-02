@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const MySpot = require('../Models/MySpot')
 
 const User = new mongoose.model('users',mongoose.Schema({
     email:{type:String, required:true,unique:true},
@@ -9,7 +10,7 @@ const User = new mongoose.model('users',mongoose.Schema({
     history:[
         {type:mongoose.Schema.Types.ObjectId, ref:'Booking'}
     ],
-    myspot:{type:String, default:null}
+    myspot:{type:mongoose.Schema.Types.ObjectId, ref:'MySpot'}
 }))
 
 module.exports = User

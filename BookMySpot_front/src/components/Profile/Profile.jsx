@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useUserstate } from '../../Context/UserContext'
 import { useNavigate } from 'react-router';
 import { IoLogOutOutline } from "react-icons/io5";
@@ -9,38 +9,99 @@ import { FaExternalLinkAlt, FaPlaceOfWorship } from "react-icons/fa";
 import Wishlistcard from './Wishlistcard';
 import { MdPolicy } from 'react-icons/md';
 import { Link } from 'react-router-dom';
+import { createnewtoken } from '../RefreshSession/RefreshUser';
 
 function Profile() {
   const { isloggedIn, refreshOtherPages } = useUserstate();
+  const [data, setdata] = useState({ saved: [] });
   const navigate = useNavigate()
   const handleLogout = async () => {
     try {
       if (!confirm("Are you want to logout?")) {
         return;
       }
-      localStorage.removeItem('authtoken')
-      localStorage.removeItem('msatoken')
-      localStorage.removeItem('email')
-      localStorage.removeItem('refreshToken')
+      const authtoken = localStorage.getItem('authtoken')
+      const res = await axios.delete('http://localhost:8083/auth/removedata',
+        {
+          headers: {
+            'Authorization': `${authtoken}`,
+            'Content-Type': 'application/json'
+          }
+        }
+      )
+      localStorage.clear();
       refreshOtherPages();
       alert("Logged out successfully!")
       navigate('/')
     }
     catch (error) {
-      console.log(error)
+      console.log(error.message)
+      if (error.response) {
+        console.log(error.response.data); // response data
+        console.log(error.response.status);
+        if (error.response.status === 401) {
+          console.log('Token expired')
+          const email = localStorage.getItem('email')
+          await createnewtoken(email)
+          await handleLogout();
+        } else if (error.response.status === 400) {
+          alert('Invalid Auth Token');
+        } else {
+          console.log('Unexpected Error:', error.response.data);
+        }
+      } else if (error.request) {
+        console.log(error.request);
+        alert('No response from the server');
+      } else {
+        console.log('Error:', error.message);
+        alert('Error:', error.message);
+      }
     }
   }
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-
+        console.log("inside effect")
+        const authtoken = localStorage.getItem('authtoken')
+        if(!authtoken){
+          return ;
+        }
+        const response = await axios.get('http://localhost:8083/auth/getprofile', {
+          headers: {
+            'Authorization': `${authtoken}`,
+            'Content-Type': 'application/json'
+          }
+        })
+        const responseData = response.data;
+        setdata(responseData)
+        console.log(responseData)
       }
       catch (error) {
-        console.log(error)
+        console.log(error.message)
+        if (error.response) {
+          console.log(error.response.data); // response data
+          console.log(error.response.status);
+          if (error.response.status === 401) {
+            console.log('Token expired')
+            const email = localStorage.getItem('email')
+            await createnewtoken(email)
+            await fetchData();
+          } else if (error.response.status === 400) {
+            alert('Invalid Auth Token');
+          } else {
+            console.log('Unexpected Error:', error.response.data);
+          }
+        } else if (error.request) {
+          console.log(error.request);
+          alert('No response from the server');
+        } else {
+          console.log('Error:', error.message);
+          alert('Error:', error.message);
+        }
       }
     }
-    fetchData()
+    fetchData();
   }, [])
 
   if (!isloggedIn) {
@@ -62,11 +123,11 @@ function Profile() {
       <div className='w-full h-full flex flex-col gap-8 px-8 pt-20 md:px-96 md:py-16 '>
         <div className='bg-white flex flex-col gap-2'>
           <div className=' flex justify-between border-l-2 border-primary px-4'>
-            <p className='text-xl md:text-3xl font-medium'>Elamparithi</p>
+            <p className='text-xl md:text-3xl font-medium'>User</p>
             <button className='flex items-center gap-2 text-xs md:text-sm bg-slate-100 p-1 md:p-2 rounded-lg text-slate-700 '>view history<FaExternalLinkAlt className='text-xs md:text-sm' /></button>
           </div>
           <div className='px-4'>
-            <p className='text-sm md:text-base'>elamparithi.s2021it@sece.ac.in</p>
+            <p className='text-sm md:text-base'>{data.email}</p>
           </div>
         </div>
         <hr></hr>
@@ -76,7 +137,10 @@ function Profile() {
             <button className='flex items-center gap-2 text-xs md:text-sm text-slate-500'>View full list<FaExternalLinkAlt className='text-xs md:text-sm' /></button>
           </div>
           <div className='flex md:gap-3 px-4 py-4'>
-            <Wishlistcard />
+              {data.saved && data.saved.length > 0 ? data.saved.map((item, index) => (
+                <Wishlistcard key={index} data={item}/>
+              )) : 
+              <p>Wishlist is empty..</p>}
           </div>
         </div>
         <div className='bg-white flex flex-col gap-2 mb-20 md:mb-0'>
@@ -86,17 +150,17 @@ function Profile() {
           <div className='px-4'>
             <div className='py-4 border-b-2'>
               <Link to="/addmyspot">
-              <button className='flex items-center gap-4 text-sm md:text-base'><FaPlaceOfWorship className='text-xl'/>View My Spot</button>
+                <button className='flex items-center gap-4 text-sm md:text-base'><FaPlaceOfWorship className='text-xl' />View My Spot</button>
               </Link>
             </div>
             <div className='py-4 border-b-2'>
-              <button className='flex items-center gap-4 text-sm md:text-base'><MdPolicy className='text-xl'/>Privacy Policy</button>
+              <button className='flex items-center gap-4 text-sm md:text-base'><MdPolicy className='text-xl' />Privacy Policy</button>
             </div>
             <div className='py-4 border-b-2'>
-              <button className='flex items-center gap-4 text-sm md:text-base'><CgNotes className='text-xl'/>Terms & condition</button>
+              <button className='flex items-center gap-4 text-sm md:text-base'><CgNotes className='text-xl' />Terms & condition</button>
             </div>
             <div className='py-4'>
-              <button onClick={handleLogout} className='flex gap-4 items-center text-red-600 text-sm md:text-base'><AiOutlineLogout className='text-xl'/>Log out</button>
+              <button onClick={handleLogout} className='flex gap-4 items-center text-red-600 text-sm md:text-base'><AiOutlineLogout className='text-xl' />Log out</button>
             </div>
           </div>
         </div>
