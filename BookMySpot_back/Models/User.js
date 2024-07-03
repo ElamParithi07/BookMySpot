@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const MySpot = require('../Models/MySpot')
 
-const User = new mongoose.model('users',mongoose.Schema({
+const User = new mongoose.model('User',mongoose.Schema({
     email:{type:String, required:true,unique:true},
     password:{type:String, required:true},
     saved:[

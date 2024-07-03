@@ -58,7 +58,7 @@ function MySpot() {
   })
 
   useEffect(()=>{
-    const data = localStorage.getItem('msatoken')
+    const data = localStorage.getItem('msaToken')
     const user = localStorage.getItem('authtoken')
     if(!user){
       sethavespot(2)
@@ -101,7 +101,7 @@ function MySpot() {
       const responseData = response.data
       console.log(responseData)
       setIndicator(false)
-      const spottoken = localStorage.setItem('msatoken', responseData.msatoken)
+      const spottoken = localStorage.setItem('msaToken', responseData.msatoken)
       alert(responseData.message)
       navigate('/profile');
     }

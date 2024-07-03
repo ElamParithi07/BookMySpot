@@ -45,7 +45,12 @@ function ReviewCard({ toggleshowreview, spotid }) {
                     await handlePost();
                 } else if (error.response.status === 400) {
                     alert('Invalid Auth Token');
-                } else {
+                }
+                else if(error.response.status === 409) {
+                    alert(error.response.data.message)
+                }
+                else {
+                    alert(error.response.data.message)
                     console.log('Unexpected Error:', error.response.data);
                 }
             } else if (error.request) {

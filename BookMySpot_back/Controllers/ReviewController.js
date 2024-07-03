@@ -2,39 +2,41 @@ const mongoose = require('mongoose');
 const Review = require('../Models/Review');
 const MySpot = require('../Models/MySpot');
 
-async function postreview(req,res){
-    try{
-        const userid = req.locals.userid;
-        const { spotid, content, rating} = req.body;
-        const spot = await MySpot.findOne({_id: spotid})
-        console.log(spot)
-        if(!spot){
-            return res.status(404).json({message:"Spot doesn't exist"})
+async function postreview(req, res) {
+    try {
+        const userId = req.locals.userid;
+        const { spotid, content, rating } = req.body;
+
+        // Find the spot by ID and populate the reviews to check if the user has already reviewed it
+        const spot = await MySpot.findOne({ _id: spotid }).populate('reviews');
+
+        if (!spot) {
+            return res.status(404).json({ message: "Spot doesn't exist" });
         }
-        if(spot.ownedBy === userid){
-            return res.status(403).json({message:"Spotowner cannot review their own spot"})
+
+        if (spot.ownedBy.toString() === userId.toString()) {
+            return res.status(403).json({ message: "Spot owner cannot review their own spot" });
         }
-        if(spot.reviews.includes(userid)){
-            return res.status(409).json({message:"You can review a spot only once."})
+
+        if (spot.reviews.some(review => review.reviewer.toString() === userId.toString())) {
+            return res.status(409).json({ message: "You can review a spot only once." });
         }
-        const review = new Review({reviewer:userid, reviewedSpot: spotid, content: content, rating: rating});
+
+        const review = new Review({ reviewer: userId, reviewedSpot: spotid, content, rating });
         await review.save();
 
-        const updatedSpot = await MySpot.findOneAndUpdate(
-            {_id: spotid},
-            { $addToSet: { reviews: review._id } },
-            { new: true }
-        )
+        spot.reviews.push(review._id);
+        await spot.save();
 
-        return res.status(200).json({message:"Review posted successfully",data : review})
-    }
-    catch(error){
-        console.log(error)
-        return res.status(500).json(error)
+        return res.status(200).json({ message: "Review posted successfully", data: review });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: "Internal server error" });
     }
 }
+
 
 //editreview
 //deletereview will be updated
 
-module.exports = {postreview}
+module.exports = { postreview }

@@ -6,10 +6,10 @@ function UserReview({ imageUrl, data }) {
     return (
         <div className='flex flex-col w-full md:w-1/4 gap-4 mb-10 p-3'>
             <div className='flex items-center gap-5'>
-                <img className='h-14 w-14 rounded-full' src={imageUrl} />
+                {/* <img className='h-14 w-14 rounded-full' src={imageUrl} /> */}
                 <div>
-                    <p className='text-lg font-semibold'>Rachan</p>
-                    <p className='text-sm text-slate-400'>India</p>
+                    <p className='text-lg font-semibold'>User</p>
+                    <p className='text-sm text-slate-400'>{data.reviewer.email}</p>
                 </div>
             </div>
             <div className='flex items-center gap-1'>

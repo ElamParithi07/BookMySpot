@@ -8,6 +8,7 @@ import { MdKeyboardArrowLeft } from 'react-icons/md';
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
 import { createnewtoken } from '../RefreshSession/RefreshUser';
 import { Bounce, Sentry } from 'react-activity';
+import SlotSelectionCard from './SpotDetailsPageContent/SlotSelectionCard';
 
 function SpotPage() {
   const location = useLocation();
@@ -16,9 +17,18 @@ function SpotPage() {
   const navigate = useNavigate();
   const { id } = useParams();
   const [data, setData] = useState({});
+  const [isShowslots, setShowslots] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [startTime, setStartTime] = useState('');
+  const [endTime, setEndTime] = useState('');
+
+  function toggleshowslots() {
+    setShowslots(!isShowslots);
+  }
+
   useEffect(() => {
     if (location.state && location.state.isTrue !== undefined) {
-      setSaved(location.state.isTrue)
+      setSaved(location.state.isTrue);
     }
     const handleFetchData = async () => {
       try {
@@ -26,17 +36,16 @@ function SpotPage() {
         const responseData = response.data;
         setData(responseData.data);
         if (isTrue) {
-          setSaved(true)
-          console.log("inside saved")
+          setSaved(true);
+          console.log("inside saved");
         }
-        console.log(responseData)
+        console.log(responseData);
       } catch (error) {
         console.log(error);
       }
     };
     handleFetchData();
-
-  }, [id,location.state]);
+  }, [id, location.state]);
 
   async function handleSave() {
     try {
@@ -57,9 +66,9 @@ function SpotPage() {
             }
           }
         );
-        const resData = res.data
+        const resData = res.data;
         setSaved(false);
-        alert("Spot removed from wish list")
+        alert("Spot removed from wish list");
         return;
       }
       const response = await axios.post("http://localhost:8083/auth/addtolist",
@@ -73,18 +82,18 @@ function SpotPage() {
           }
         }
       );
-      const responseData = response.data
+      const responseData = response.data;
       setSaved(true);
-      alert("Spot added to wish list")
+      alert("Spot added to wish list");
     } catch (error) {
-      console.log(error.message)
+      console.log(error.message);
       if (error.response) {
         console.log(error.response.data); // response data
         console.log(error.response.status);
         if (error.response.status === 401) {
-          console.log('Token expired')
-          const email = localStorage.getItem('email')
-          await createnewtoken(email)
+          console.log('Token expired');
+          const email = localStorage.getItem('email');
+          await createnewtoken(email);
           await handleSave();
         } else if (error.response.status === 400) {
           alert('Invalid Auth Token');
@@ -101,6 +110,20 @@ function SpotPage() {
     }
   }
 
+  const handleSlotSelection = (date, startTime, endTime) => {
+    setSelectedDate(date);
+    setStartTime(startTime);
+    setEndTime(endTime);
+  };
+
+  const validateSelection = () => {
+    if (!selectedDate || !startTime || !endTime) {
+      alert('Please select a date, start time, and end time.');
+      return false;
+    }
+    return true;
+  };
+
   if (Object.keys(data).length === 0) {
     return (
       <div className='h-screen w-full flex justify-center items-center'>
@@ -111,6 +134,15 @@ function SpotPage() {
 
   return (
     <div className='mx-7 md:mx-40 min-h-fit flex flex-col md:py-10 gap-5'>
+      {
+        isShowslots && (
+          <SlotSelectionCard
+            toggleshowslots={toggleshowslots}
+            data={data}
+            onSlotSelection={handleSlotSelection}
+          />
+        )
+      }
       <div className='flex flex-col md:flex-row justify-between gap-2'>
         <div className='flex gap-3'>
           <button onClick={() => navigate(-1)}><MdKeyboardArrowLeft className='text-2xl md:text-3xl' /></button>
@@ -121,15 +153,17 @@ function SpotPage() {
             <CiExport className='text-lg md:text-2xl' />
             <p className='text-sm md:text-base'>Share</p>
           </div>
-          {issaved ? <button className='flex items-center justify-center gap-1' onClick={() => handleSave()}>
-            <AiFillHeart className='text-primary text-lg md:text-2xl' />
-            <p className='text-sm md:text-base'>Saved</p>
-          </button> :
+          {issaved ? (
+            <button className='flex items-center justify-center gap-1' onClick={() => handleSave()}>
+              <AiFillHeart className='text-primary text-lg md:text-2xl' />
+              <p className='text-sm md:text-base'>Saved</p>
+            </button>
+          ) : (
             <button className='flex items-center justify-center gap-1' onClick={() => handleSave()}>
               <AiOutlineHeart className='text-lg md:text-2xl' />
               <p className='text-sm md:text-base'>Save</p>
             </button>
-          }
+          )}
         </div>
       </div>
       <SpotImageGrid />
@@ -139,15 +173,19 @@ function SpotPage() {
           <p className='text-base font-semibold'>
             ₹{data.feeperhour} / hr
           </p>
-          <p className='text-xs'>
-            You won't be charged yet
-          </p>
+          <button className='text-xs bg-slate-200 p-1 rounded-md' onClick={() => toggleshowslots()}>
+            Choose your slot
+          </button>
         </div>
-        <div className='bg-primary w-36 h-3/5 py-5 mr-10 rounded-xl flex items-center justify-center cursor-pointer'>
-          <Link to={{
-            pathname: `/book/${data._id}`,
-            state: { spotId: data._id } // Pass data via state
-          }}><p className='text-white'>Reserve</p></Link>
+        <div
+          className='bg-primary w-36 h-3/5 py-5 mr-10 rounded-xl flex items-center justify-center cursor-pointer'
+          onClick={() => {
+            if (validateSelection()) {
+              navigate(`/book/${data._id}`, { state: { spotId: data._id, selectedDate, startTime, endTime } });
+            }
+          }}
+        >
+          <p className='text-white'>Reserve</p>
         </div>
       </div>
     </div>

@@ -1,19 +1,29 @@
-import React, { useEffect, useState } from 'react'
-import { IoClose } from 'react-icons/io5'
+import React, { useEffect, useState } from 'react';
+import { IoClose } from 'react-icons/io5';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
-function SlotSelectionCard({ toggleshowslots, data }) {
-  const [age, setAge] = useState('');
+function SlotSelectionCard({ toggleshowslots, data, onSlotSelection }) {
+  const [startTime, setStartTime] = useState('');
+  const [endTime, setEndTime] = useState('');
   const [slots, setSlots] = useState([]);
   const [datelist, setDatalist] = useState([]);
+  const [selectedDate, setSelectedDate] = useState(null);
 
-  const handleChange = (event) => {
-    setAge(event.target.value);
+  const handleStartTimeChange = (event) => {
+    setStartTime(event.target.value);
+    setEndTime('');
   };
 
+  const handleEndTimeChange = (event) => {
+    setEndTime(event.target.value);
+  };
+
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
+  };
 
   useEffect(() => {
     const generateDateList = () => {
@@ -30,18 +40,33 @@ function SlotSelectionCard({ toggleshowslots, data }) {
       return dates;
     };
 
-    async function getSlots(){
-      try{
-        
+    const generateTimeSlots = () => {
+      const times = [];
+      for (let i = 0; i < 24; i++) {
+        const hour = i % 12 || 12;
+        const period = i < 12 ? 'AM' : 'PM';
+        times.push(`${hour}:00 ${period}`);
       }
-      catch(error){
-        console.log(error)
-      }
-    }
+      return times;
+    };
 
     setDatalist(generateDateList());
+    setSlots(generateTimeSlots());
   }, []);
 
+  const getEndTimeOptions = () => {
+    const startIndex = slots.indexOf(startTime);
+    return slots.slice(startIndex + 1);
+  };
+
+  const handleSave = () => {
+    if (selectedDate && startTime && endTime) {
+      onSlotSelection(selectedDate, startTime, endTime);
+      toggleshowslots();
+    } else {
+      alert('Please select a date, start time, and end time.');
+    }
+  };
 
   return (
     <div className='fixed top-0 left-0 right-0 bottom-0 flex justify-center items-center'>
@@ -50,60 +75,64 @@ function SlotSelectionCard({ toggleshowslots, data }) {
           <button onClick={() => toggleshowslots()} className='flex items-center'><IoClose className='text-2xl' /></button>
         </div>
         <div>
-          <div className='flex border justify-evenly p-3'>
-            {datelist.map((date, index) => (
-              <div key={index} className='flex flex-col items-center border-t-2 border-t-primary border px-5 py-2 rounded-md '>
-                <p className='text-lg'>{`${date.month}`}</p>
-                <p className='text-slate-600 text-sm'>{`${date.day}`}</p>
-              </div>
-            ))}
+          <div className="overflow-x-auto p-3">
+            <div className="flex space-x-4 md:justify-center md:gap-4">
+              {datelist.map((date, index) => (
+                <div
+                  key={index}
+                  className={`flex flex-col items-center border-t-2 border-t-primary border px-3 md:px-5 md:py-2 rounded-md ${selectedDate === date ? 'bg-gray-200' : ''}`}
+                  onClick={() => handleDateChange(date)}
+                >
+                  <p className="text-lg">{date.month}</p>
+                  <p className="text-slate-600 text-sm">{date.day}</p>
+                </div>
+              ))}
+            </div>
           </div>
           <div className='p-10 flex items-center justify-center'>
-            <p>Available slots will be displayed here...</p>
+            <p className='text-sm md:text-base text-center'>Available slots will be displayed here...</p>
           </div>
           <div className='flex items-center justify-center'>
-            <p className='text-xl font-medium'>Choose your Slot</p>
+            <p className='text-base md:text-xl font-medium'>Choose your Slot</p>
           </div>
-          <div className='flex h-48 items-center justify-evenly'>
-            <FormControl variant="standard" sx={{ m: 2, minWidth: 130 }}>
-              <InputLabel id="demo-simple-select-standard-label">Start Time</InputLabel>
+          <div className="flex flex-col md:flex-row md:h-38 items-center justify-evenly p-4 space-y-4 md:space-y-0 md:space-x-4">
+            <FormControl variant="standard" className="w-3/5 md:w-1/5">
+              <InputLabel id="start-time-select-label">Start Time</InputLabel>
               <Select
-                labelId="demo-simple-select-standard-label"
-                id="demo-simple-select-standard"
-                value={age}
-                onChange={handleChange}
+                labelId="start-time-select-label"
+                id="start-time-select"
+                value={startTime}
+                onChange={handleStartTimeChange}
                 label="Start Time"
               >
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
-                <MenuItem value={10}>Ten</MenuItem>
-                <MenuItem value={20}>Twenty</MenuItem>
-                <MenuItem value={30}>Thirty</MenuItem>
+                {slots.map((time, index) => (
+                  <MenuItem key={index} value={time}>{time}</MenuItem>
+                ))}
               </Select>
             </FormControl>
-            <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
-              <InputLabel id="demo-simple-select-standard-label">End Time</InputLabel>
+            <FormControl variant="standard" className="w-3/5 md:w-1/5">
+              <InputLabel id="end-time-select-label">End Time</InputLabel>
               <Select
-                labelId="demo-simple-select-standard-label"
-                id="demo-simple-select-standard"
-                value={age}
-                onChange={handleChange}
+                labelId="end-time-select-label"
+                id="end-time-select"
+                value={endTime}
+                onChange={handleEndTimeChange}
                 label="End Time"
+                disabled={!startTime}
               >
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
-                <MenuItem value={10}>Ten</MenuItem>
-                <MenuItem value={20}>Twenty</MenuItem>
-                <MenuItem value={30}>Thirty</MenuItem>
+                {getEndTimeOptions().map((time, index) => (
+                  <MenuItem key={index} value={time}>{time}</MenuItem>
+                ))}
               </Select>
             </FormControl>
+          </div>
+          <div className='flex items-center justify-center py-2'>
+            <button className='bg-primary text-white rounded-md px-4 py-2' onClick={handleSave}>Save</button>
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default SlotSelectionCard
+export default SlotSelectionCard;

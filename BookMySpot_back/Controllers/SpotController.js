@@ -104,15 +104,25 @@ async function getAllSpot(req, res) {
 async function getSpotbyId(req, res) {
     try {
         const { spotid } = req.query;
-        const data = await MySpot.findById(spotid).populate('reviews')
+        const data = await MySpot.findById(spotid)
+            .populate({
+                path: 'reviews',
+                populate: {
+                    path: 'reviewer',
+                    model: 'User' // Adjust the model name if it's different
+                }
+            });
+
         if (!data) {
             return res.status(404).json({ message: "No data found" });
         }
-        return res.status(200).json({ data: data })
+
+        return res.status(200).json({ data: data });
     } catch (error) {
         console.log(error);
         return res.status(500).json({ message: error.message || "Internal Server Error" });
     }
 }
+
 
 module.exports = { addmyspot, updatespot, deletespot, getAllSpot, getSpotbyId }

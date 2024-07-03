@@ -116,7 +116,7 @@ function SpotDetails({ data }) {
                 </button>
             </div>
             {/* Reviews text*/}
-            <div className='w-full pb-10 md:pb-0 md:flex justify-evenly'>
+            <div className='w-full pb-10 md:pb-0 md:flex flex-wrap float-left'>
                 {data.reviews && data.reviews.map((item, index)=>{
                     return (
                         <>
