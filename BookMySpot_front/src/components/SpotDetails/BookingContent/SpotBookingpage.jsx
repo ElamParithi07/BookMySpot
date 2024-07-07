@@ -3,7 +3,7 @@ import { MdKeyboardArrowLeft } from "react-icons/md";
 import ConfirmBookingCard from './ConfirmBookingCard';
 import { FcGoogle } from "react-icons/fc";
 import { MdOutlineMail } from "react-icons/md";
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams, useLocation } from 'react-router-dom';
 import { useUserstate } from '../../../Context/UserContext';
 import axios from 'axios';
 import { Bounce } from "react-activity";
@@ -11,50 +11,50 @@ import { createnewtoken } from '../../RefreshSession/RefreshUser';
 
 function SpotBookingpage() {
     const { id } = useParams();
+    const location = useLocation();
+    const { selectedDate, startTime, endTime } = location.state || {};
     const [data, setData] = useState({});
     const navigate = useNavigate();
-    const [indicator, setIndicator] = useState(false)
+    const [indicator, setIndicator] = useState(false);
     const { isloggedIn } = useUserstate();
-    const email = localStorage.getItem('email')
-    let authtoken = localStorage.getItem('authtoken')
+    const email = localStorage.getItem('email');
+    let authtoken = localStorage.getItem('authtoken');
     
     useEffect(() => {
         async function fetchData() {
             try {
-                const response = await axios.get(`http://localhost:8083/spot/getspotbyid`, { spotid: id });
-                const responseData = response.data
-                setData(responseData.data)
-            }
-            catch (error) {
-                console.log(error.response)
+                const response = await axios.get(`http://localhost:8083/spot/getspotbyid`, { params: { spotid: id } });
+                const responseData = response.data;
+                setData(responseData.data);
+            } catch (error) {
+                console.log(error.response);
             }
         }
-        fetchData()
-    }, [])
+        fetchData();
+    }, [id]);
 
     async function handleBook() {
         try {
-            setIndicator(true)
-            authtoken = localStorage.getItem('authtoken')
+            setIndicator(true);
+            authtoken = localStorage.getItem('authtoken');
             const response = await axios.post('http://localhost:8083/book/bookspot', { bookedto: id, hours: 2 }, {
                 headers: {
                     'Authorization': `Bearer ${authtoken}`,
                     'content-type': 'application/json'
                 }
-            })
-            const responseData = response.data
-            setIndicator(false)
-            alert(responseData.message)
-            navigate('/')
-        }
-        catch (error) {
-            console.log(error.message)
+            });
+            const responseData = response.data;
+            setIndicator(false);
+            alert(responseData.message);
+            navigate('/');
+        } catch (error) {
+            console.log(error.message);
             if (error.response) {
                 console.log(error.response.data); // response data
                 console.log(error.response.status); 
                 if (error.response.status === 401) {
-                    console.log('Token expired')
-                    await createnewtoken(email)
+                    console.log('Token expired');
+                    await createnewtoken(email);
                     await handleBook();
                 } else if (error.response.status === 400) {
                     alert('Invalid Auth Token');
@@ -68,10 +68,9 @@ function SpotBookingpage() {
                 console.log('Error:', error.message);
                 alert('Error:', error.message);
             }
-            setIndicator(false)
+            setIndicator(false);
         }
     }
-
 
     return (
         <div className='mx-5 h-full md:mx-48 md:mt-11 flex flex-col md:flex-row gap-7'>
@@ -87,23 +86,23 @@ function SpotBookingpage() {
                     <div className='flex justify-between'>
                         <div>
                             <p>Date</p>
-                            <p>18/05/2024</p>
+                            <p>{selectedDate ? `${selectedDate.day}/${selectedDate.month}/${selectedDate.year}` : 'N/A'}</p>
                         </div>
-                        <p className='font-medium underline'>Edit</p>
+                        <p className='font-medium underline cursor-pointer' onClick={() => navigate(-1)}>Edit</p>
                     </div>
                     <div className='flex justify-between'>
                         <div>
                             <p>Slot time</p>
-                            <p>6pm - 7pm</p>
+                            <p>{startTime && endTime ? `${startTime} - ${endTime}` : 'N/A'}</p>
                         </div>
-                        <p className='font-medium underline'>Edit</p>
+                        <p className='font-medium underline cursor-pointer' onClick={() => navigate(-1)}>Edit</p>
                     </div>
                     <div className='flex justify-between'>
                         <div>
                             <p>No. of Hours</p>
                             <p>1</p>
                         </div>
-                        <p className='font-medium underline'>Edit</p>
+                        <p className='font-medium underline cursor-pointer' onClick={() => navigate(-1)}>Edit</p>
                     </div>
                 </div>
                 <div className='h-px bg-slate-300 my-5 rounded'></div>
@@ -136,7 +135,7 @@ function SpotBookingpage() {
                         </div>
                 }
             </div>
-            <div className='hidden md:w-1/2 md:flex justify-center'> {/* Adjusted to full width on mobile */}
+            <div className='hidden md:w-1/2 md:flex justify-center'>
                 <ConfirmBookingCard data={data} />
             </div>
         </div>
@@ -144,10 +143,3 @@ function SpotBookingpage() {
 }
 
 export default SpotBookingpage;
-
-
-
-
-
-
-
