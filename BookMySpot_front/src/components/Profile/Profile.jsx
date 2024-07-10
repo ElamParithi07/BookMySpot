@@ -116,15 +116,15 @@ function Profile() {
     <div className='w-full h-full '>
       <div className="w-full px-8 py-16 md:px-40 md:py-24 h-32 md:h-48 bg-[url('https://img.freepik.com/free-vector/travel-around-world-postcard-tourism-vacation-earth-world-journey-global_1284-46582.jpg?t=st=1717657381~exp=1717660981~hmac=d0977af0f194c5ab31a058f786f2b10f7b2b9fae1075e2c122d025560b59bd7f&w=1380')] bg-cover">
         <img
-          className='w-32 md:w-48 border-4 border-white h-32 md:h-48 rounded-full object-cover'
-          src='https://a0.muscache.com/im/pictures/miso/Hosting-5264493/original/10d2c21f-84c2-46c5-b20b-b51d1c2c971a.jpeg?im_w=1200'
+          className='w-32 md:w-48 border-white h-32 md:h-48 rounded-full object-cover'
+          src='https://cdn4.iconfinder.com/data/icons/avatars-xmas-giveaway/128/batman_hero_avatar_comics-512.png'
         />
       </div>
       <div className='w-full h-full flex flex-col gap-8 px-8 pt-20 md:px-96 md:py-16 '>
         <div className='bg-white flex flex-col gap-2'>
           <div className=' flex justify-between border-l-2 border-primary px-4'>
             <p className='text-xl md:text-3xl font-medium'>User</p>
-            <button className='flex items-center gap-2 text-xs md:text-sm bg-slate-100 p-1 md:p-2 rounded-lg text-slate-700 '>view history<FaExternalLinkAlt className='text-xs md:text-sm' /></button>
+            <button className='flex items-center gap-2 text-xs md:text-sm bg-slate-100 p-1 md:p-2 rounded-lg text-slate-700 ' onClick={()=>navigate('/profile/history',{state:data.history})}>view history<FaExternalLinkAlt className='text-xs md:text-sm' /></button>
           </div>
           <div className='px-4'>
             <p className='text-sm md:text-base'>{data.email}</p>
@@ -134,7 +134,7 @@ function Profile() {
         <div className='bg-white flex flex-col gap-2'>
           <div className='flex items-center  gap-5 border-l-2 border-primary px-4'>
             <p className='text-lg md:text-xl font-medium'>My Wishlist</p>
-            <button className='flex items-center gap-2 text-xs md:text-sm text-slate-500'>View full list<FaExternalLinkAlt className='text-xs md:text-sm' /></button>
+            <button className='flex items-center gap-2 text-xs md:text-sm text-slate-500' onClick={()=>navigate('/profile/wishlist',{state:data.saved})}>View full list<FaExternalLinkAlt className='text-xs md:text-sm' /></button>
           </div>
           <div className='flex md:gap-3 px-4 py-4'>
               {data.saved && data.saved.length > 0 ? data.saved.map((item, index) => (

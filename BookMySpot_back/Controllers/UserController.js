@@ -210,7 +210,6 @@ async function getProfile(req,res){
     try{
         const email = req.locals.email;
         const user = await User.findOne({email: email}).populate('myspot').populate('saved')
-        console.log(user)
         if(user){
             const userData = {
                 email : user.email,

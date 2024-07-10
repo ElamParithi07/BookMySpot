@@ -10,6 +10,8 @@ import Explore from "./components/Explore/Explore";
 import { UserProvider } from "./Context/UserContext";
 import Profile from "./components/Profile/Profile";
 import MySpot from "./components/AddMySpot/MySpot";
+import History from "./components/Profile/History/History";
+import Wishlist from "./components/Profile/Wishlist/Wishlist";
 
 
 function App() {
@@ -23,6 +25,8 @@ function App() {
           <Route path="/book/:id" element={<SpotBookingpage/>}></Route>
           <Route path="/explore" element={<Explore/>}></Route>
           <Route path="/profile" element={<Profile/>}></Route>
+          <Route path="/profile/history" element={<History/>}></Route>
+          <Route path="/profile/wishlist" element={<Wishlist/>}></Route>
           <Route path="/addmyspot" element={<MySpot/>}></Route>
         </Route>
         <Route path="/login" element={<UserLogin/>}></Route>

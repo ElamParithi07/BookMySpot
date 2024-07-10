@@ -124,5 +124,28 @@ async function getSpotbyId(req, res) {
     }
 }
 
+async function getSpotbyToken(req, res) {
+    try {
+        const { spotid } = req.locals;
+        console.log(spotid)
+        const data = await MySpot.findOne({_id:spotid})
+            .populate({
+                path: 'reviews',
+                populate: {
+                    path: 'reviewer',
+                    model: 'User' // Adjust the model name if it's different
+                }
+            });
 
-module.exports = { addmyspot, updatespot, deletespot, getAllSpot, getSpotbyId }
+        if (!data) {
+            return res.status(404).json({ message: "No data found" });
+        }
+
+        return res.status(200).json({ data: data });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: error.message || "Internal Server Error" });
+    }
+}
+
+module.exports = { addmyspot, updatespot, deletespot, getAllSpot, getSpotbyId, getSpotbyToken }

@@ -27,6 +27,7 @@ async function checkspotauthtoken(req,res, next){
             spotid:isValidtoken._id,
             userid:decoded.spotowner
         }
+        console.log("spotid- ",req.locals.spotid)
         next();
     }
     catch(error){

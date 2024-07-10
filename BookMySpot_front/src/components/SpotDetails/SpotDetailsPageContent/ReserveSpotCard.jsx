@@ -65,7 +65,7 @@ function ReserveSpotCard({ data }) {
         <div className='flex flex-col gap-2'>
           <div className='flex justify-between'>
             <p className='underline'>₹{data.feeperhour} x 1 hours</p>
-            <p>₹1000</p>
+            <p>₹{data.feeperhour}</p>
           </div>
           <div className='flex justify-between'>
             <p className='underline'>BookMySpot service fee</p>
@@ -76,7 +76,7 @@ function ReserveSpotCard({ data }) {
         <div className='flex flex-col gap-2'>
           <div className='flex justify-between'>
             <p className='font-medium'>Total</p>
-            <p className='font-medium'>₹1000</p>
+            <p className='font-medium'>₹{data.feeperhour}</p>
           </div>
         </div>
       </div>

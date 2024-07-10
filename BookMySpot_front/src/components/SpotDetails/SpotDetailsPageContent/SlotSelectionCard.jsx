@@ -42,7 +42,9 @@ function SlotSelectionCard({ toggleshowslots, data, onSlotSelection }) {
 
     const generateTimeSlots = () => {
       const times = [];
-      for (let i = 0; i < 24; i++) {
+      const now = new Date();
+      const currentHour = now.getHours();
+      for (let i = currentHour; i < 24; i++) {
         const hour = i % 12 || 12;
         const period = i < 12 ? 'AM' : 'PM';
         times.push(`${hour}:00 ${period}`);
@@ -50,8 +52,11 @@ function SlotSelectionCard({ toggleshowslots, data, onSlotSelection }) {
       return times;
     };
 
-    setDatalist(generateDateList());
-    setSlots(generateTimeSlots());
+    const dates = generateDateList();
+    const times = generateTimeSlots();
+    setDatalist(dates);
+    setSlots(times);
+    setStartTime(times[0]);  // set the first available time slot as the default start time
   }, []);
 
   const getEndTimeOptions = () => {
@@ -78,14 +83,14 @@ function SlotSelectionCard({ toggleshowslots, data, onSlotSelection }) {
           <div className="overflow-x-auto p-3">
             <div className="flex space-x-4 md:justify-center md:gap-4">
               {datelist.map((date, index) => (
-                <div
+                <button
                   key={index}
-                  className={`flex flex-col items-center border-t-2 border-t-primary border px-3 md:px-5 md:py-2 rounded-md ${selectedDate === date ? 'bg-gray-200' : ''}`}
+                  className={`flex flex-col items-center border-t-2 border-t-primary border px-3 md:px-5 md:py-2 rounded-md hover:bg-gray-200 ${selectedDate === date ? 'bg-gray-200' : ''}`}
                   onClick={() => handleDateChange(date)}
                 >
                   <p className="text-lg">{date.month}</p>
                   <p className="text-slate-600 text-sm">{date.day}</p>
-                </div>
+                </button>
               ))}
             </div>
           </div>

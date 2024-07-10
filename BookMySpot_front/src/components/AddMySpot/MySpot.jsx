@@ -57,6 +57,7 @@ function MySpot() {
     // slots: ''
   })
 
+  const spottoken = localStorage.getItem('msaToken')
   useEffect(()=>{
     const data = localStorage.getItem('msaToken')
     const user = localStorage.getItem('authtoken')
@@ -138,7 +139,7 @@ function MySpot() {
   if(havespot===1){
     return (
       <>
-      <SpotDashboard/>
+      <SpotDashboard id={spottoken}/>
       </>
     )
   }

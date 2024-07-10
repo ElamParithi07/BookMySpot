@@ -59,7 +59,7 @@ function SpotBookingpage() {
                 } else if (error.response.status === 400) {
                     alert('Invalid Auth Token');
                 } else {
-                    console.log('Unexpected Error:', error.response.data);
+                    alert( error.response.data.message);
                 }
             } else if (error.request) {
                 console.log(error.request);

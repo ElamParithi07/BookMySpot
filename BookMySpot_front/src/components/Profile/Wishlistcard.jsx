@@ -32,7 +32,6 @@ function Wishlistcard({ data }) {
       </div>
       <div className='flex gap-3 items-center'>
         <p className='text-xs md:text-sm text-slate-500'>{data.location}</p>
-        <p className='flex items-center text-xs md:text-sm text-slate-500'><PiPhoneCallFill className='text-sm text-black' /> : {data.phonenumber}</p>
       </div>
     </div>
   )
